@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Register from './components/Register/Register';
 import Home from './view/Home/Home';
 import NotFound from './view/NotFound/NotFound';
+import Login from './components/Login/Login';
 import './App.css';
 import Header from './components/Header/Header';
 import { AppContext } from './components/store/app.context';
@@ -33,6 +34,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/trending" element={<TrendingView />} />
           <Route path="/post" element={<PostView />} />
+          <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register></Register>} />
           <Route path="/upload" element={<UploadView />} />
           <Route path="*" element={<NotFound />} />
