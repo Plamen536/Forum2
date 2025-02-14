@@ -20,7 +20,7 @@ const TrendingView = ({ userId, postId }) => {
   };
 
   return (
-    <div>
+    <div className='trendingView'>
       <h3>Author: {obj.user}</h3>
       <h1>{obj.post.title}</h1>
       <button onClick={handleClick}>Details</button>

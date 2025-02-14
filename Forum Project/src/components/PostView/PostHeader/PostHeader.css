@@ -1,25 +1,24 @@
-.postView {
-  background-color: #b9b9b9; /* Light gray background */
+.postHeader {
+  background-color: #f0f0f0; /* Light gray background */
   padding: 20px;
   border-radius: 8px;
   margin: 20px 0;
 }
 
-.postViewUser h2 {
+.postHeader h2 {
   margin: 0;
   font-size: 1.2em;
-  color: #333;
+  color: #444;
 }
 
-.postViewUser h1 {
+.postHeader h1 {
   margin: 10px 0;
   font-size: 1.5em;
   color: #111;
 }
 
-.postViewButton button {
+.postHeader button {
   padding: 10px 20px;
-  margin-right: 10px;
   background-color: #4CAF50;
   color: white;
   border: none;
@@ -27,15 +26,10 @@
   cursor: pointer;
 }
 
-.postViewButton button:hover {
+.postHeader button:hover {
   background-color: #45a049;
 }
 
-.postViewUser hr {
+.postHeader hr {
   margin: 20px 0;
-}
-
-.postViewUser p {
-  margin: 10px 0;
-  color: #666;
 }

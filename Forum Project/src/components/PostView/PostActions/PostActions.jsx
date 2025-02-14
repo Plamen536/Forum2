@@ -26,7 +26,7 @@ const PostActions = ({
   };
 
   return (
-    <>
+    <div className="postActions">
       <span>Likes: {renderLikesWithK(likes)}</span>
       <button onClick={toggleViewComments}>
         {!viewComments ? (
@@ -42,7 +42,7 @@ const PostActions = ({
       )}
       {viewReply && <Reply reply={handleAddReply} />}
       {viewComments && <Comments onAddReply={reply} />}
-    </>
+    </div>
   );
 };
 
