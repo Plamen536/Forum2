@@ -7,7 +7,7 @@ import Login from './components/Login/Login';
 import './App.css';
 import Header from './components/Header/Header';
 import { AppContext } from './components/store/app.context';
-import TrendingView from './components/TrendingView/Dashboard';
+import TrendingView from './components/Dashboard/Dashboard';
 import PostView from './components/PostView/PostView';
 import UploadView from './components/Upload/Upload';
 
