@@ -1,24 +1,19 @@
-.trendingView {
+.postActions {
   background-color: #f0f0f0; /* Light gray background */
   padding: 20px;
   border-radius: 8px;
   margin: 20px 0;
+  color: #333;
 }
 
-.trendingView h3 {
-  margin: 0;
+.postActions span {
   font-size: 1.2em;
   color: #333;
 }
 
-.trendingView h1 {
-  margin: 10px 0;
-  font-size: 1.5em;
-  color: #111;
-}
-
-.trendingView button {
+.postActions button {
   padding: 10px 20px;
+  margin-right: 10px;
   background-color: #4caf50;
   color: white;
   border: none;
@@ -26,11 +21,6 @@
   cursor: pointer;
 }
 
-.trendingView button:hover {
+.postActions button:hover {
   background-color: #45a049;
-}
-
-.trendingView h6 {
-  margin: 5px 0;
-  color: #666;
 }

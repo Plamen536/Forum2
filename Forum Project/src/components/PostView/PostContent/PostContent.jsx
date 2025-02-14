@@ -10,6 +10,6 @@ const PostContent = ({ content }) => {
     return content.split('\n').map((line, index) => <p key={index}>{line}</p>);
   };
 
-  return <div>{renderContentWithBreaks(content)}</div>;
+  return <div className="postContent">{renderContentWithBreaks(content)}</div>;
 };
 export default PostContent;
