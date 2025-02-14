@@ -9,7 +9,8 @@ export default function Header() {
                 <NavLink to="/">Home</NavLink> |&nbsp;
                 <NavLink to="/trending">Trending</NavLink> |&nbsp;
                 <NavLink to="/login">Login</NavLink> |&nbsp;
-                <NavLink to="/register">Register</NavLink>
+                <NavLink to="/register">Register</NavLink> |&nbsp;
+                <NavLink to="/upload">Upload</NavLink> |&nbsp;
             </div>
         </div>
     );

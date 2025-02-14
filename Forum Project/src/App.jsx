@@ -8,6 +8,7 @@ import Header from './components/Header/Header';
 import { AppContext } from './components/store/app.context';
 import TrendingView from './components/TrendingView/TrendingView';
 import PostView from './components/PostView/PostView';
+import UploadView from './components/Upload/Upload';
 
 function App() {
   const [appState, setAppState] = useState({
@@ -33,6 +34,7 @@ function App() {
           <Route path="/trending" element={<TrendingView />} />
           <Route path="/post" element={<PostView />} />
           <Route path="/register" element={<Register></Register>} />
+          <Route path="/upload" element={<UploadView />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </AppContext.Provider>
