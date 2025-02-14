@@ -1,0 +1,22 @@
+.postViewUser {
+  border: 12px solid rgb(0, 188, 212);
+  border-bottom-left-radius: 32px;
+  border-bottom-right-radius: 32px;
+  background-color: rgb(78, 78, 78);
+}
+
+.postViewButton {
+  margin-top: 10pt;
+  border: 1px solid red;
+  border-radius: 16px;
+  background-color: rgb(78, 78, 78);
+}
+
+.postViewButton > button{
+  margin: 10px;
+  display: inline;
+}
+
+.postViewButton > span{
+  margin-right: 10px;
+}
