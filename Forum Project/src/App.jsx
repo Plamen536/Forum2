@@ -1,11 +1,15 @@
 import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Register from "./components/Register/Register";
+import Home from "./view/Home/Home";
+import NotFound from "./view/NotFound/NotFound";
 import "./App.css";
+import Header from "./components/Header/Header";
+import { AppContext } from "./components/store/app.context";
 
 function App() {
   const [appState, setAppState] = useState({
-    user,
+    user: null,
     userData: null,
   });
 
@@ -19,20 +23,16 @@ function App() {
   };
 
   return (
-    <AppContext.Provider value={{ ...appState, setContext: setAppState }}>
-      <BrowserRouter>
-        <div className="App">
-          <Link to="/">Home</Link> &nbsp;
-          {user === null && <Link to="/register">Register</Link>} &nbsp;
-          {user === null && <Link to="/login">Login</Link>} &nbsp;
-          {user !== null && (
-            <Link to="/" onClick={onLogout}>
-              Logout
-            </Link>
-          )}
-        </div>
-      </BrowserRouter>
-    </AppContext.Provider>
+    <BrowserRouter>
+      <AppContext.Provider value={{ ...appState, setAppState }}>
+        <Header />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/register" element={<Register></Register>} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </AppContext.Provider>
+    </BrowserRouter>
   );
 }
 
