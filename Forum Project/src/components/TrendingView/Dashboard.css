@@ -1,23 +1,23 @@
-.trendingView {
+.dashboard {
   background-color: #f0f0f0; /* Light gray background */
   padding: 20px;
   border-radius: 8px;
   margin: 20px 0;
 }
 
-.trendingView h3 {
+.dashboard h3 {
   margin: 0;
   font-size: 1.2em;
   color: #333;
 }
 
-.trendingView h1 {
+.dashboard h1 {
   margin: 10px 0;
   font-size: 1.5em;
   color: #111;
 }
 
-.trendingView button {
+.dashboard button {
   padding: 10px 20px;
   background-color: #4caf50;
   color: white;
@@ -26,11 +26,11 @@
   cursor: pointer;
 }
 
-.trendingView button:hover {
+.dashboard button:hover {
   background-color: #45a049;
 }
 
-.trendingView h6 {
+.dashboard h6 {
   margin: 5px 0;
   color: #666;
 }

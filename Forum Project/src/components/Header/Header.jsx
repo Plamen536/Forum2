@@ -29,8 +29,8 @@ export default function Header() {
         <div>
             <h1>Forum</h1>
             <div>
-                <NavLink to="/">Home</NavLink> |&nbsp;
-                <NavLink to="/trending">Trending</NavLink> |&nbsp;
+                
+                <NavLink to="/trending">Dashboard</NavLink> |&nbsp;
                 {!user && (<>
                 <NavLink to="/login">Login</NavLink> |&nbsp;
                 <NavLink to="/register">Register</NavLink>
