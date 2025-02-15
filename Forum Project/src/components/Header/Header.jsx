@@ -5,17 +5,14 @@ import { AppContext } from '../store/app.context';
 import { logoutUser } from '../../services/auth.service';
 import './Header.css';
 import { getUserData } from '../../services/users.service';
+import Avatar from './Avatar/Avatar';
+import DropdownMenu from './DropdownMenu/DropdownMenu';
 
 export default function Header() {
   const { user, setAppState } = useContext(AppContext);
-  const [userData, setUserData] = useState({});
   const navigate = useNavigate();
 
-  useEffect(() => {
-    getUserData(user.uid).then((data) =>
-      setUserData(data[Object.keys(data)[0]])
-    );
-  }, [user]);
+  const Test = false;
 
   const logout = () => {
     logoutUser()
@@ -31,22 +28,30 @@ export default function Header() {
       });
   };
 
-  return (
-    <div>
-      <h1>Forum</h1>
-      {user && <img src={userData.avatarUrl} alt="avatar" />}
+  if (!Test) {
+    return (
       <div>
-        <NavLink to="/">Home</NavLink> |&nbsp;
-        <NavLink to="/dashboard">Dashboard</NavLink> |&nbsp;
-        {!user && (
-          <>
-            <NavLink to="/login">Login</NavLink> |&nbsp;
-            <NavLink to="/register">Register</NavLink>
-          </>
-        )}
-        {user && <NavLink to="/upload">Upload</NavLink>}
-        {user && <button onClick={logout}>Logout</button>}
+        {user && <DropdownMenu />}
+        <h1>Forum</h1>
+        <nav>
+          <NavLink to="/">Home</NavLink> |&nbsp;
+          <NavLink to="/dashboard">Dashboard</NavLink> |&nbsp;
+          {!user && (
+            <>
+              <NavLink to="/login">Login</NavLink> |&nbsp;
+              <NavLink to="/register">Register</NavLink>
+            </>
+          )}
+          {user && <NavLink to="/upload">Upload</NavLink>}
+          {user && <button onClick={logout}>Logout</button>}
+        </nav>
       </div>
-    </div>
-  );
+    );
+  } else {
+    return (
+      <>
+        <DropdownMenu />
+      </>
+    );
+  }
 }
