@@ -1,0 +1,29 @@
+import { useContext } from 'react';
+import { AppContext } from '../store/app.context';
+import { useNavigate } from 'react-router-dom';
+import { logoutUser } from '../../services/auth.service';
+
+const Logout = () => {
+  const { setAppState } = useContext(AppContext);
+  const navigate = useNavigate();
+
+  const logout = () => {
+    logoutUser()
+      .then(() => {
+        setAppState({
+          user: null,
+          userData: null,
+        });
+        navigate('/login');
+      })
+      .catch((error) => {
+        console.error(error.message);
+      });
+  };
+  return (
+    <>
+      <button onClick={logout}>Logout</button>
+    </>
+  );
+};
+export default Logout;

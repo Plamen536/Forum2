@@ -1,5 +1,7 @@
 import { useState, useContext } from 'react';
-import { AppContext } from '../store/app.context';
+import { AppContext } from '../../store/app.context';
+import { db }  from '../../config/firebase-config';
+import { ref, set, push } from 'firebase/database';
 
 
 const UploadView = () => {  
@@ -15,8 +17,29 @@ const UploadView = () => {
     };
 
     if(!user) {
-        return <p>Log in to upload a post</p>;
+        return alert("You must be logged in to upload a post");
     }
+    
+    const post = {
+        title,
+        content,
+        author: user.uid,
+        createdOn: new Date().toString(),
+    };
+
+    try {
+        const newPostRef = push(ref(db, 'posts'));
+        set(newPostRef, post);
+        setTitle('');
+        setContent('');
+        alert('Post uploaded successfully');
+    }   catch (error) {
+        console.error('Error uploading post:', error.message);
+        alert('Error uploading post');
+    }
+    
+    
+    
 
     return (
         <div>

@@ -1,8 +1,8 @@
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import './TrendingView.css';
+import './Dashboard.css';
 
-const TrendingView = ({ userId, postId }) => {
+const Dashboard = ({ userId, postId }) => {
   const navigate = useNavigate();
 
   const obj = {
@@ -20,7 +20,7 @@ const TrendingView = ({ userId, postId }) => {
   };
 
   return (
-    <div className='trendingView'>
+    <div className='dashboard'>
       <h3>Author: {obj.user}</h3>
       <h1>{obj.post.title}</h1>
       <button onClick={handleClick}>Details</button>
@@ -37,9 +37,9 @@ const TrendingView = ({ userId, postId }) => {
   );
 };
 
-TrendingView.propTypes = {
+Dashboard.propTypes = {
   userId: PropTypes.array,
   postId: PropTypes.array,
 };
 
-export default TrendingView;
+export default Dashboard;
