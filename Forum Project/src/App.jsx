@@ -31,10 +31,9 @@ function App() {
       <AppContext.Provider value={{ ...appState, setAppState }}>
         <Header />
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/trending" element={<TrendingView />} />
+          <Route path="/" element={<TrendingView />} />
           <Route path="/post" element={<PostView />} />
-          <Route path="/login" element={<Login />} />
+          <Route path="/login" element={<Login></Login>} />
           <Route path="/register" element={<Register></Register>} />
           <Route path="/upload" element={<UploadView />} />
           <Route path="*" element={<NotFound />} />
