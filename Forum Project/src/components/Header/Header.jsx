@@ -1,32 +1,14 @@
 import { NavLink } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
-import { useContext, useEffect, useState } from 'react';
+import { useContext } from 'react';
 import { AppContext } from '../store/app.context';
-import { logoutUser } from '../../services/auth.service';
 import './Header.css';
-import { getUserData } from '../../services/users.service';
-import Avatar from './Avatar/Avatar';
 import DropdownMenu from './DropdownMenu/DropdownMenu';
+import Logout from '../Logout/Logout';
 
 export default function Header() {
-  const { user, setAppState } = useContext(AppContext);
-  const navigate = useNavigate();
+  const { user,  } = useContext(AppContext);
 
   const Test = false;
-
-  const logout = () => {
-    logoutUser()
-      .then(() => {
-        setAppState({
-          user: null,
-          userData: null,
-        });
-        navigate('/login');
-      })
-      .catch((error) => {
-        console.error(error.message);
-      });
-  };
 
   if (!Test) {
     return (
@@ -43,7 +25,7 @@ export default function Header() {
             </>
           )}
           {user && <NavLink to="/upload">Upload</NavLink>}
-          {user && <button onClick={logout}>Logout</button>}
+          {user && <Logout />}
         </nav>
       </div>
     );

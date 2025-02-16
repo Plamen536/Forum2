@@ -17,3 +17,8 @@ ul{
   padding: 0;
   text-align: center;
 }
+
+.dropdown-menu button {
+  border-radius: 0;
+  border-bottom-left-radius: 18px;
+}

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import Register from './components/Register/Register';
 import Home from './view/Home/Home';
 import NotFound from './view/NotFound/NotFound';
@@ -13,6 +13,9 @@ import UploadView from './components/Upload/Upload';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from './config/firebase-config';
 import { getUserData } from './services/users.service';
+import ProfileView from './components/ProfileLayout/ProfileView/ProfileView';
+import ProfileLayout from './components/ProfileLayout/ProfileLayout';
+import MainLayout from './components/MainLayout/MainLayout';
 
 function App() {
   const [appState, setAppState] = useState({
@@ -50,20 +53,30 @@ function App() {
   }
 
   return (
-    <BrowserRouter>
-      <AppContext.Provider value={{ ...appState, setAppState }}>
-        <Header />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/post" element={<PostView />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register></Register>} />
-          <Route path="/upload" element={<UploadView />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </AppContext.Provider>
-    </BrowserRouter>
+    <div>
+      <BrowserRouter>
+        <AppContext.Provider value={{ ...appState, setAppState }}>
+          <Routes>
+            {/* Routes with main layout */}
+            <Route element={<MainLayout />}>
+              <Route path="/" element={<Home />} />
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/post" element={<PostView />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/upload" element={<UploadView />} />
+            </Route>
+
+            {/* Profile section with its own layout */}
+            <Route element={<ProfileLayout />}>
+              <Route path="/your-profile" element={<ProfileView />} />
+            </Route>
+
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </AppContext.Provider>
+      </BrowserRouter>
+    </div>
   );
 }
 

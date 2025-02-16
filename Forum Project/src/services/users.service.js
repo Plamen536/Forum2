@@ -8,9 +8,17 @@ export const getUserByHandle = async (handle) => {
   }
 };
 
-export const createUserHandle = async (handle, uid, email) => {
+export const createUserHandle = async (
+  handle,
+  uid,
+  email,
+  firstName,
+  lastName
+) => {
   const user = {
     handle,
+    firstName,
+    lastName,
     uid,
     email,
     avatarUrl: `https://api.dicebear.com/9.x/thumbs/svg?seed=${handle}`,

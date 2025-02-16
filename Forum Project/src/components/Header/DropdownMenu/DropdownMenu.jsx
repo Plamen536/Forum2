@@ -1,13 +1,13 @@
-import { Suspense, useState } from 'react';
+import { useState } from 'react';
 import Avatar from '../Avatar/Avatar';
-import { Link, useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import './DropdownMenu.css';
-import Loading from '../../PostView/Loading/Loading';
 
 const DropdownMenu = () => {
   const [menuView, setMenuView] = useState(false);
-  const navigate = useNavigate();
+  
   const isAdmin = false;
+  // isAdmin is for test purpose
 
   const handleClick = () => {
     setMenuView(!menuView);
@@ -30,14 +30,14 @@ const DropdownMenu = () => {
           <hr />
           <ul>
             <li>
-              <Link to="/profile">
+              <NavLink to="/your-profile">
                 <span>Your profile</span>
-              </Link>
+              </NavLink>
             </li>
             <li>
-              <Link>
+              <NavLink to="/your-posts">
                 <span>Your posts</span>
-              </Link>
+              </NavLink>
             </li>
             <hr />
             <li>Status: {!isAdmin ? <>User ✅</> : <>Admin 👑</>}</li>
