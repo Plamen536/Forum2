@@ -1,45 +1,54 @@
 import { Link, NavLink, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { getDatabase, ref, onValue } from "firebase/database";
 import PropTypes from 'prop-types';
 import './Dashboard.css';
 
-const Dashboard = ({ userId, postId }) => {
+const Dashboard = () => {
+  const db = getDatabase();
+  const [posts, setPosts] = useState([]);
+
+  useEffect(() => {
+    const postsRef = ref(db, "posts");
+    onValue(postsRef, (snapshot) => {
+      const postsData = snapshot.val();
+      if (postsData) {
+        const postList = Object.entries(postsData).map(([id, post]) => ({
+          id,
+          ...post,
+        }));
+        setPosts(postList);
+      } else {
+        setPosts([]);
+      }
+    });
+  }, []);
+
   const navigate = useNavigate();
 
-  const obj = {
-    user: 'az',
-    post: {
-      title: 'New Title',
-      date: '2025-02-15',
-      likes: 100,
-    },
-  };
-
-  const handleClick = () => {
-    navigate('/post');
-    // navigate(`/post/${postId}`);
+  const handleClick = (postId) => {
+    navigate(`/post/${postId}`);
   };
 
   return (
     <div className='dashboard'>
-      <h3>Author: {obj.user}</h3>
-      <h1>{obj.post.title}</h1>
-      <button onClick={handleClick}>Details</button>
-      <h6>Likes: {obj.post.likes}</h6>
-      <h6>Date: {obj.post.date}</h6>
+      <h1>Posts</h1>
+      {posts.map((post) => (
+        <div key={post.id} className='post'>
+          <h2>{post.title}</h2>
+          <p>{post.content}</p>
+          <button onClick={() => handleClick(post.id)}>Details</button>
+          <h6>Likes: {post.likes}</h6>
+          <h6>Date: {post.date}</h6>
+        </div>
+      ))}
     </div>
-    //with DB template
-    //   <div>
-    //   <h3>Author: {userId}</h3>
-    //   <h1>{postId.title}</h1>
-    //   <h6>Likes: {postId.likes}</h6>
-    //   <h6>Date: {postId.date}</h6>
-    // </div>
   );
 };
 
 Dashboard.propTypes = {
-  userId: PropTypes.array,
-  postId: PropTypes.array,
+  userId: PropTypes.string,
+  postId: PropTypes.string,
 };
 
 export default Dashboard;
