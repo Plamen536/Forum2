@@ -5,7 +5,6 @@ import Home from './view/Home/Home';
 import NotFound from './view/NotFound/NotFound';
 import Login from './components/Login/Login';
 import './App.css';
-import Header from './components/Header/Header';
 import { AppContext } from './components/store/app.context';
 import Dashboard from './components/Dashboard/Dashboard';
 import PostView from './components/PostView/PostView';
@@ -66,12 +65,10 @@ function App() {
               <Route path="/register" element={<Register />} />
               <Route path="/upload" element={<UploadView />} />
             </Route>
-
             {/* Profile section with its own layout */}
             <Route element={<ProfileLayout />}>
               <Route path="/your-profile" element={<ProfileView />} />
             </Route>
-
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AppContext.Provider>

@@ -1,32 +1,41 @@
-/* Header.css */
-
 .header {
-    background-color: #4CAF50;
-    padding: 20px;
-    text-align: center;
-    font-size: 24px;
+    background-color: #4caf50;
     color: white;
-}
-
-.header h1 {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    position: relative;
+    top: 0;
+    left: 0;
+    right: 0;
+    box-sizing: border-box;
+  }
+  
+  .header h1 {
     margin: 0;
     font-size: 36px;
-}
-
-.navbar {
+  }
+  
+  .logoutButton {
+    margin: 10px;
+  }
+  
+  .navbar {
     display: flex;
     justify-content: center;
     margin-top: 10px;
-}
-
-.navbar a {
+  }
+  
+  .navbar a {
+    border-right: 3px solid white;
     color: white;
-    padding: 14px 20px;
+    padding: 20px;
     text-decoration: none;
     text-align: center;
-    margin: 0 10px; /* Add margin to create space between links */
-}
-
-.navbar a:hover {
+  }
+  
+  .navbar a:hover {
     background-color: #45a049;
-}
+  }

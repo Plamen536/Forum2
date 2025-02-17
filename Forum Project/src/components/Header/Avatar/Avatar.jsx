@@ -9,16 +9,18 @@ const Avatar = () => {
   {
     user &&
       useEffect(() => {
-        getUserData(user.uid).then((data) =>
-          setUserData(data[Object.keys(data)[0]])
-        );
-      }, []);
+        getUserData(user.uid)
+          .then((data) => data[Object.keys(data)[0]])
+          .then((data) => setUserData(data.avatarUrl))
+          .catch((error) => console.log(error.message));
+      }, [user]);
   }
 
   return (
     <>
-      <img src={userData.avatarUrl} alt="avatar" />
+      <img src={userData} alt="avatar" />
     </>
   );
 };
+Avatar.displayName = 'Avatar';
 export default Avatar;

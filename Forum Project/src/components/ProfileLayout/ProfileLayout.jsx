@@ -2,10 +2,11 @@ import { useContext } from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
 import { AppContext } from '../store/app.context';
 import Logout from '../Logout/Logout';
+import Footer from '../Footer/Footer';
 
 const ProfileLayout = () => {
   const { user } = useContext(AppContext);
-  
+
   return (
     <div className="profile-layout">
       {/* Custom profile header/navigation */}
@@ -19,6 +20,7 @@ const ProfileLayout = () => {
       <main>
         <Outlet />
       </main>
+      <Footer />
     </div>
   );
 };

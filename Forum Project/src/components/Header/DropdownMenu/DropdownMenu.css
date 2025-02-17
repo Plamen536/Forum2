@@ -1,10 +1,9 @@
 .dropdown-menu {
-  position: absolute;
-  top: 0;
-  right: 0;
+  position: relative;
   justify-items: right;
   background-color: #f0f0f0;
   border-bottom-left-radius: 24px;
+  border-bottom-right-radius: 24px;
   color: black;
 }
 
@@ -13,7 +12,7 @@
   list-style-type: none;
 }
 
-ul{
+ul {
   padding: 0;
   text-align: center;
 }
@@ -21,4 +20,5 @@ ul{
 .dropdown-menu button {
   border-radius: 0;
   border-bottom-left-radius: 18px;
+  border-bottom-right-radius: 18px;
 }
