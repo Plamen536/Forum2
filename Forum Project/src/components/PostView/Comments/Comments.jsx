@@ -1,10 +1,13 @@
-import { Suspense } from 'react';
+import { Suspense, useContext, useEffect } from 'react';
 import Loading from '../Loading/Loading';
+import { getUserData } from '../../../services/users.service';
+import { AppContext } from '../../store/app.context';
 
 const Comments = () => {
+  
   const comment = {
     name: 'John Doe',
-    comment: 'This is a comment\nThis is on new line comment',
+    comment: 'This is a comment This is on new line comment',
   };
 
   /**
@@ -14,15 +17,19 @@ const Comments = () => {
    * @returns {JSX.Element[]} An array of <p> elements with the split comments.
    */
   const renderCommentsWithBreaks = (comment) => {
-    return comment.split('\n').map((line, index) => <p key={index}>{line}</p>);
+    return comment
+      .split('\n')
+      .map((line, index) => <span key={index}>{line}</span>);
   };
 
   return (
     <Suspense fallback={<Loading />}>
       <div className="comments">
         <h2>Comments</h2>
+        <hr />
         <h3>{comment.name}</h3>
         {renderCommentsWithBreaks(comment.comment)}
+        <hr />
       </div>
     </Suspense>
   );

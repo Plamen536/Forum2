@@ -1,22 +1,21 @@
-import { useEffect, useState } from "react";
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
-import { useAuthState } from "react-firebase-hooks/auth";
-import PostsAndUsers from "./Posts&Users/Posts&Users"; 
-import { auth } from "./config/firebase-config";
-import { getUserData } from "./services/users.service";
-import { AppContext } from "./components/store/app.context";
-import Footer from "./components/Footer/Footer";
-import Register from "./components/Register/Register";
-import Home from "./view/Home/Home";
-import NotFound from "./view/NotFound/NotFound";
-import Login from "./components/Login/Login";
-import Dashboard from "./components/Dashboard/Dashboard";
-import PostView from "./components/PostView/PostView";
-import UploadView from "./components/Upload/Upload";
-import ProfileView from "./components/ProfileLayout/ProfileView/ProfileView";
-import ProfileLayout from "./components/ProfileLayout/ProfileLayout";
-import MainLayout from "./components/MainLayout/MainLayout";
-import "./App.css";
+import { useEffect, useState } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import PostsAndUsers from './Posts&Users/Posts&Users';
+import { auth } from './config/firebase-config';
+import { getUserData } from './services/users.service';
+import { AppContext } from './components/store/app.context';
+import Register from './components/Register/Register';
+import Home from './view/Home/Home';
+import NotFound from './view/NotFound/NotFound';
+import Login from './components/Login/Login';
+import Dashboard from './components/Dashboard/Dashboard';
+import PostView from './components/PostView/PostView';
+import UploadView from './components/Upload/Upload';
+import ProfileView from './components/ProfileLayout/ProfileView/ProfileView';
+import ProfileLayout from './components/ProfileLayout/ProfileLayout';
+import MainLayout from './components/MainLayout/MainLayout';
+import './App.css';
 
 function App() {
   const [appState, setAppState] = useState({
@@ -62,7 +61,7 @@ function App() {
             <Route element={<MainLayout />}>
               <Route path="/" element={<Home />} />
               <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/post" element={<PostView />} />
+              <Route path={`/post/:id`} element={<PostView />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/upload" element={<UploadView />} />
@@ -73,7 +72,6 @@ function App() {
             </Route>
             <Route path="*" element={<NotFound />} />
           </Routes>
-          <PostsAndUsers />
         </AppContext.Provider>
       </BrowserRouter>
     </div>

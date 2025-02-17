@@ -40,7 +40,7 @@ const PostActions = ({
           {!viewReply ? <>Reply</> : <>Hide Reply</>}
         </button>
       )}
-      {viewReply && <Reply reply={handleAddReply} />}
+      {viewReply && <Reply replyContent={handleAddReply} />}
       {viewComments && <Comments onAddReply={reply} />}
     </div>
   );

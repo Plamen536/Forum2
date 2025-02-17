@@ -1,29 +1,38 @@
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import { AppContext } from '../../store/app.context';
+import { getUserData } from '../../../services/users.service';
 
-const Reply = ({ reply }) => {
-  const [addReply, setAddReply] = useState('');
+const Reply = ({ replyContent }) => {
+  const [reply, setReply] = useState('');
+  const { user } = useContext(AppContext);
+
+  useEffect(() => {
+    getUserData(user.uid)
+      .then((data) => data[Object.keys(data)])
+      .catch((error) => console.log(error));
+  }, []);
 
   const handleReplayChange = (e) => {
-    setAddReply(e.target.value);
+    setReply(e.target.value);
   };
 
   const handleReplySubmit = () => {
-    reply(addReply);
-    setAddReply('');
+    replyContent(reply);
+    setReply('');
   };
 
   return (
     <div>
-      <label htmlFor="reply">Enter text: </label>
+      <label htmlFor="replyContent">Enter text: </label>
       <br />
       <textarea
         onChange={handleReplayChange}
-        value={addReply}
-        name="reply"
-        id="reply"
+        value={reply}
+        name="replyContent"
+        id="replyContent"
         rows={1}
-      ></textarea>
+      />
       <br />
       <br />
       <button onClick={handleReplySubmit}>Submit</button>
@@ -31,7 +40,7 @@ const Reply = ({ reply }) => {
   );
 };
 Reply.propTypes = {
-  reply: PropTypes.string,
+  replyContent: PropTypes.func.isRequired,
 };
 
 export default Reply;

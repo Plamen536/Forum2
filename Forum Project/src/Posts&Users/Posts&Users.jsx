@@ -42,8 +42,8 @@ export default function PostsAndUsers() {
 
   return (
     <div>
-      <h1>Posts: {posts.length}</h1>
-      <h1>Users: {users.length}</h1>
+      <h2>Posts: {posts.length}</h2>
+      <h2>Users: {users.length}</h2>
     </div>
   );
 }

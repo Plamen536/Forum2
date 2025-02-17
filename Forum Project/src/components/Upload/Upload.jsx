@@ -21,6 +21,14 @@ const UploadView = () => {
       const newPostRef = push(ref(db, 'posts'));
       const postId = newPostRef.key;
 
+      const post = {
+        title,
+        content,
+        author: userHandle.handle,
+        createdOn: new Date().toString(),
+        uid: postId,
+      };
+
       await Promise.all([
         set(ref(db, `posts/${postId}`), post),
         set(ref(db, `users/${userHandle.handle}/posts/${postId}`), post),
@@ -62,12 +70,7 @@ const UploadView = () => {
     return alert('You must be logged in to upload a post');
   }
 
-  const post = {
-    title,
-    content,
-    author: user.uid,
-    createdOn: new Date().toString(),
-  };
+  
 
   return (
     <div>
