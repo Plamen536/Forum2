@@ -8,7 +8,7 @@ export default function PostsAndUsers() {
 
   useEffect(() => {
     const db = getDatabase();
-    
+
     // Fetch posts
     const postsRef = ref(db, "posts");
     onValue(postsRef, (snapshot) => {
@@ -42,8 +42,23 @@ export default function PostsAndUsers() {
 
   return (
     <div>
-      <h2>Posts: {posts.length}</h2>
-      <h2>Users: {users.length}</h2>
+      <h1
+        style={{
+            position: "fixed",    // Stays fixed at the bottom right
+            bottom: "20px",       // 20px from the bottom
+            right: "20px",        // 20px from the right
+            backgroundColor: "#2c3e50",
+            color: "white",
+            padding: "10px 20px",
+            borderRadius: "8px",
+            fontSize: "20px",
+            fontWeight: "bold",
+            boxShadow: "2px 2px 10px rgba(0, 0, 0, 0.3)",
+            display: "inline-block"
+        }}
+      >
+        📢 Posts: {posts.length} | 👥 Users: {users.length}
+      </h1>
     </div>
   );
 }

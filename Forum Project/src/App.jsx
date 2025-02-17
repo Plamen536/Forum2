@@ -72,6 +72,7 @@ function App() {
             </Route>
             <Route path="*" element={<NotFound />} />
           </Routes>
+          <PostsAndUsers />
         </AppContext.Provider>
       </BrowserRouter>
     </div>
