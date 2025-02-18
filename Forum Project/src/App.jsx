@@ -16,6 +16,7 @@ import ProfileView from './components/ProfileLayout/ProfileView/ProfileView';
 import ProfileLayout from './components/ProfileLayout/ProfileLayout';
 import MainLayout from './components/MainLayout/MainLayout';
 import './App.css';
+import Admin from './components/Admin/Admin';
 
 function App() {
   const [appState, setAppState] = useState({
@@ -65,6 +66,8 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/upload" element={<UploadView />} />
+              <Route path="/users" element={<Admin />} />
+
             </Route>
             {/* Profile section with its own layout */}
             <Route element={<ProfileLayout />}>

@@ -1,6 +1,5 @@
 import React from 'react';
 import './Home.css';
-import PostsAndUsers from '../../Posts&Users/Posts&Users';
 
 const Home = () => {
   return (

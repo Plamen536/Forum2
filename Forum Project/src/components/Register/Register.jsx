@@ -2,10 +2,9 @@ import { AppContext } from '../store/app.context';
 import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { registerUser } from '../../services/auth.service';
-import {
-  createUserHandle,
-  getUserByHandle,
-} from '../../services/users.service';
+import { createUserHandle, getUserByHandle } from '../../services/users.service';
+import { Box, Button, Input, Heading, Stack, Text } from '@chakra-ui/react';
+import { Link } from 'react-router-dom';
 
 export default function Register() {
   const { setAppState } = useContext(AppContext);
@@ -15,6 +14,7 @@ export default function Register() {
     lastName: '',
     email: '',
     password: '',
+    role: 'admin',
   });
 
   const navigate = useNavigate();
@@ -51,7 +51,8 @@ export default function Register() {
         userCredential.user.uid,
         user.email,
         user.firstName,
-        user.lastName
+        user.lastName,
+        user.role
       );
 
       setAppState({
@@ -72,61 +73,58 @@ export default function Register() {
   };
 
   return (
-    <div>
-      <h3>Register</h3>
-      <div>
-        <label htmlFor="handle">Username: </label>
-        <input
+    <Box maxW="md" mx="auto" p={4}>
+      <Heading as="h3" size="lg" mb={6}>Register</Heading>
+      <Stack spacing={4}>
+        <Input
           value={user.handle}
           onChange={updateUser('handle')}
           type="text"
-          name="handle"
           id="handle"
+          placeholder="Username"
+          required
         />
-        <br />
-        <br />
-        <label htmlFor="firstName">First Name: </label>
-        <input
+        <Input
           value={user.firstName}
           onChange={updateUser('firstName')}
           type="text"
-          name="firstName"
           id="firstName"
+          placeholder="First Name"
           maxLength={32}
+          required
         />
-        <br />
-        <br />
-        <label htmlFor="lastName">Last Name: </label>
-        <input
+        <Input
           value={user.lastName}
           onChange={updateUser('lastName')}
           type="text"
-          name="lastName"
           id="lastName"
+          placeholder="Last Name"
           maxLength={32}
+          required
         />
-        <br />
-        <br />
-        <label htmlFor="email">Email: </label>
-        <input
+        <Input
           value={user.email}
           onChange={updateUser('email')}
           type="email"
-          name="email"
           id="email"
+          placeholder="Email"
+          required
         />
-        <br />
-        <br />
-        <label htmlFor="password">Password: </label>
-        <input
+        <Input
           value={user.password}
           onChange={updateUser('password')}
           type="password"
-          name="password"
           id="password"
+          placeholder="Password"
+          required
         />
-        <button onClick={register}>Register</button>
-      </div>
-    </div>
+        <Button onClick={register} colorScheme="blue" width="full" mt={4}>
+          Register
+        </Button>
+      </Stack>
+      <Text mt={4} fontSize="sm" color="gray.600" textAlign="center">
+        Already have an account?  <Link to="/login" style={{ color: 'blue', textDecoration: 'underline' }}>Login</Link>
+      </Text>
+    </Box>
   );
 }
