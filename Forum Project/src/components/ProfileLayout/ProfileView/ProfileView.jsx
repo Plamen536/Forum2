@@ -1,16 +1,26 @@
 import { useContext, useEffect, useState } from 'react';
+import { Box, Button, Heading, Input, Stack, Text } from '@chakra-ui/react';
 import Avatar from '../../Header/Avatar/Avatar';
 import { AppContext } from '../../store/app.context';
 import { getUserData } from '../../../services/users.service';
+import Header from '../../Header/Header';
 
 const ProfileView = () => {
   const { user } = useContext(AppContext);
   const [data, setData] = useState('');
+  const [fileName, setFileName] = useState('');
 
   const uploadFile = (formData) => {
     const file = formData.get('image');
     console.log(file.name);
     alert(`file: ${file}`);
+  };
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setFileName(file.name);
+    }
   };
 
   useEffect(() => {
@@ -20,20 +30,56 @@ const ProfileView = () => {
   }, [user]);
 
   return (
-    <div>
-      <h1>Profile</h1>
-      <Avatar />
-      <h2>Username: {data.handle}</h2>
-      <h4>firstName: {data.firstName}</h4>
-      <h4>lastName: {data.lastName}</h4>
+    
+    <Box maxW="container.sm" mx="auto" py={6}>
+      <Heading as="h1" size="xl" mb={6}>
+        Profile
+      </Heading>
+      
+      <Box mb={6}>
+        <Avatar />
+      </Box>
+      
+      <Text fontSize="lg" fontWeight="bold">Username: {data.handle}</Text>
+      <Text fontSize="md">First Name: {data.firstName}</Text>
+      <Text fontSize="md" mb={4}>Last Name: {data.lastName}</Text>
+      
       <hr />
-      <h2>Settings</h2>
+      
+      <Heading as="h2" size="md" mt={6} mb={4}>
+        Settings
+      </Heading>
+      
       <form action={uploadFile}>
-        <label htmlFor="image">Upload image of avatar</label>
-        <input type="file" name="image" />
-        <button type="submit">Change avatar</button>
+        <Box mb={4}>
+          <Text mb={2}>Upload Image of Avatar</Text>
+          
+          <Stack direction="row" align="center">
+            <Input
+              type="file"
+              name="image"
+              id="image"
+              onChange={handleFileChange}
+              display="none" // Hides the default file input button
+            />
+            <Button
+              as="label"
+              htmlFor="image"
+              colorScheme="teal"
+              variant="outline"
+            >
+              Choose File
+            </Button>
+            <Text>{fileName ? fileName : 'No file selected'}</Text>
+          </Stack>
+        </Box>
+        
+        <Button type="submit" colorScheme="teal" variant="solid">
+          Change Avatar
+        </Button>
       </form>
-    </div>
+    </Box>
   );
 };
+
 export default ProfileView;

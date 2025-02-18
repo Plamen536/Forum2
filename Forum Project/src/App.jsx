@@ -13,10 +13,10 @@ import Dashboard from './components/Dashboard/Dashboard';
 import PostView from './components/PostView/PostView';
 import UploadView from './components/Upload/Upload';
 import ProfileView from './components/ProfileLayout/ProfileView/ProfileView';
-import ProfileLayout from './components/ProfileLayout/ProfileLayout';
 import MainLayout from './components/MainLayout/MainLayout';
 import './App.css';
 import Admin from './components/Admin/Admin';
+import Header from './components/Header/Header';
 
 function App() {
   const [appState, setAppState] = useState({
@@ -57,6 +57,7 @@ function App() {
     <div>
       <BrowserRouter>
         <AppContext.Provider value={{ ...appState, setAppState }}>
+          <Header />
           <Routes>
             {/* Routes with main layout */}
             <Route element={<MainLayout />}>
@@ -70,7 +71,7 @@ function App() {
 
             </Route>
             {/* Profile section with its own layout */}
-            <Route element={<ProfileLayout />}>
+            <Route element={<ProfileView />}>
               <Route path="/your-profile" element={<ProfileView />} />
             </Route>
             <Route path="*" element={<NotFound />} />
