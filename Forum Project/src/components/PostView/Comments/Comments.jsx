@@ -6,10 +6,28 @@ import { db } from '../../../config/firebase-config';
 import { useParams } from 'react-router-dom';
 import './Comments.css';
 
+/**
+ * @module Comments
+ * @description A component that displays and manages comments for a post
+ * 
+ * @component
+ * @param {object} props
+ * @param {string} props.id - Post ID from URL parameters
+ * @param {object} props.user - Current user object from context
+ * 
+ * @example
+ * return (
+ *   <Comments />
+ * )
+ * 
+ * @returns {JSX.Element} Comments section with like functionality and sorting
+ */
+
 const Comments = () => {
   const { id } = useParams();
   const { user } = useContext(AppContext);
   const [comments, setComments] = useState([]);
+  const [sortByLikes, setSortByLikes] = useState(false);
 
   useEffect(() => {
     const commentsRef = ref(db, `posts/${id}/comments`);
@@ -20,7 +38,7 @@ const Comments = () => {
           ([id, comment]) => ({
             id,
             ...comment,
-            likes: comment.likes || {}
+            likes: comment.likes || {},
           })
         );
         setComments(commentList);
@@ -33,9 +51,12 @@ const Comments = () => {
   const handleLikeClick = async (commentId) => {
     if (!user) return;
 
-    const commentRef = ref(db, `posts/${id}/comments/${commentId}/likes/${user.uid}`);
+    const commentRef = ref(
+      db,
+      `posts/${id}/comments/${commentId}/likes/${user.uid}`
+    );
     const snapshot = await get(commentRef);
-    
+
     const updates = {};
     if (snapshot.exists()) {
       // User already liked - remove like
@@ -44,7 +65,7 @@ const Comments = () => {
       // User hasn't liked - add like
       updates[`posts/${id}/comments/${commentId}/likes/${user.uid}`] = true;
     }
-    
+
     await update(ref(db), updates);
   };
 
@@ -56,12 +77,26 @@ const Comments = () => {
     return comment.likes ? Object.keys(comment.likes).length : 0;
   };
 
+  const sortedComments = sortByLikes
+    ? [...comments].sort((a, b) => getLikesCount(b) - getLikesCount(a))
+    : comments;
+
   return (
     <Suspense fallback={<Loading />}>
       <div className="comments">
         <h2>Comments</h2>
+        <div className="comments-header">
+          <label className="sort-checkbox">
+            <input
+              type="checkbox"
+              checked={sortByLikes}
+              onChange={(e) => setSortByLikes(e.target.checked)}
+            />
+            Sort by most liked
+          </label>
+        </div>
         <hr />
-        {comments.map((comment) => (
+        {sortedComments.map((comment) => (
           <div className="comment-container" key={comment.id}>
             <span className="avatar-icon-container">
               <img className="avatar-icon" src={comment.avatar} alt="avatar" />
@@ -69,8 +104,8 @@ const Comments = () => {
             </span>
             <div className="comment-content">
               {user && (
-                <button 
-                  onClick={() => handleLikeClick(comment.id)} 
+                <button
+                  onClick={() => handleLikeClick(comment.id)}
                   className="like-unlike"
                 >
                   {isLikedByUser(comment) ? 'Unlike' : 'Like'}

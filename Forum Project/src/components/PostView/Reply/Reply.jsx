@@ -6,6 +6,20 @@ import { useParams } from 'react-router-dom';
 import { db } from '../../../config/firebase-config';
 import './Reply.css'
 
+/**
+ * @module Reply
+ * @description Component for adding replies to posts
+ * 
+ * @component
+ * 
+ * @example
+ * return (
+ *   <Reply />
+ * )
+ * 
+ * @returns {JSX.Element} Reply form with text input and submit button
+ */
+
 const Reply = () => {
   const { id } = useParams();
   const [isLoading, setIsLoading] = useState(false);

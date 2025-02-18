@@ -62,3 +62,20 @@
   display: inline;
   width: 100px;
 }
+
+.comments-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.sort-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+}
+
+.sort-checkbox input {
+  cursor: pointer;
+}
