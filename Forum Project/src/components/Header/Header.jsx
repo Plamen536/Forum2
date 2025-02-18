@@ -3,7 +3,6 @@ import { useContext } from 'react';
 import { AppContext } from '../store/app.context';
 import { Box, Button, Container, Flex, Heading, Stack } from '@chakra-ui/react';
 import DropdownMenu from './DropdownMenu/DropdownMenu';
-import Logout from '../Logout/Logout';
 
 export default function Header() {
   const { user } = useContext(AppContext);

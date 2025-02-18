@@ -3,18 +3,27 @@ import { AppContext } from '../store/app.context';
 import { db } from '../../config/firebase-config';
 import { ref, set, push } from 'firebase/database';
 import { getUserData } from '../../services/users.service';
+import {
+  Box,
+  Button,
+  Input,
+  Textarea,
+  Text,
+  Stack,
+} from '@chakra-ui/react';
 
 const UploadView = () => {
   const { user } = useContext(AppContext);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [userHandle, setUserHandle] = useState({});
+  const [error, setError] = useState('');
 
   useEffect(() => {
     getUserData(user.uid).then((data) =>
-      setUserHandle(data[Object.keys(data)[0]])
+      setUserHandle(data[Object.keys(data)[0]]),
     );
-  }, []);
+  }, [user]);
 
   const postsDB = async () => {
     try {
@@ -39,24 +48,23 @@ const UploadView = () => {
       alert('Post uploaded successfully');
     } catch (error) {
       console.error('Error uploading post:', error.message);
-      alert('Error uploading post');
+      setError('Error uploading post');
     }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     let isValid = true;
+    setError(''); // Reset error message
 
     if (!title || !content) {
-      alert(`Please enter title and content`);
+      setError('Please enter title and content');
       isValid = false;
-    }
-    if (title.length < 16 || title.length > 64) {
-      alert(`The title must be between 16 and 64 symbols.`);
+    } else if (title.length < 16 || title.length > 64) {
+      setError('The title must be between 16 and 64 symbols.');
       isValid = false;
-    }
-    if (content.length < 32 || content.length > 8192) {
-      alert(`The content must be between 32 symbols and 8192 symbols.`);
+    } else if (content.length < 32 || content.length > 8192) {
+      setError('The content must be between 32 symbols and 8192 symbols.');
       isValid = false;
     }
 
@@ -67,41 +75,66 @@ const UploadView = () => {
   };
 
   if (!user) {
-    return alert('You must be logged in to upload a post');
+    return (
+      <Box p={5} bg="red.300" borderRadius="md" boxShadow="xl">
+        <Text color="red.800" fontSize="lg">You must be logged in to upload a post</Text>
+      </Box>
+    );
   }
 
-  
-
   return (
-    <div>
-      <h2>Upload a Post</h2>
+    <Box p={5} maxWidth="600px" mx="auto" bg="teal.50" borderRadius="md" boxShadow="lg">
+      <h2 style={{ color: 'black' }}>Upload a Post</h2>
+      &nbsp;
+      {error && (
+        <Box mb={4} p={3} bg="yellow.200" borderRadius="md">
+          <Text color="yellow.800" fontSize="sm">{error}</Text>
+        </Box>
+      )}
       <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="title">Title: </label>
-          <input
-            type="text"
-            id="title"
-            name="title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            required
-          />
-          <span>{title.length}</span>
-        </div>
-        <div>
-          <label htmlFor="content">Content: </label>
-          <textarea
-            id="content"
-            name="content"
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-            required
-          />
-          <span>{content.length}</span>
-        </div>
-        <button type="submit">Submit</button>
+        <Stack spacing={4}>
+          <Box>
+            <Text mb={2} color="black">Title</Text>
+            <Input
+              id="title"
+              name="title"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              maxLength={64}
+              placeholder="Enter the title"
+              required
+              bg="teal.100"
+              borderColor="teal.400"
+              color="black" // Set text color to black
+            />
+            <Text fontSize="sm" color="black" textAlign="right">{title.length}/64</Text>
+          </Box>
+
+          <Box>
+            <Text mb={2} color="black">Content</Text>
+            <Textarea
+              id="content"
+              name="content"
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+              minLength={32}
+              maxLength={8192}
+              placeholder="Enter the content"
+              resize="vertical"
+              required
+              bg="teal.100"
+              borderColor="teal.400"
+              color="black" // Set text color to black
+            />
+            <Text fontSize="sm" color="black" textAlign="right">{content.length}/8192</Text>
+          </Box>
+
+          <Button colorScheme="teal" type="submit" width="full" _hover={{ bg: 'teal.400' }}>
+            Submit
+          </Button>
+        </Stack>
       </form>
-    </div>
+    </Box>
   );
 };
 

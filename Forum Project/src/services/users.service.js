@@ -13,13 +13,15 @@ export const createUserHandle = async (
   uid,
   email,
   firstName,
-  lastName
+  lastName,
+  role,
 ) => {
   const user = {
     handle,
     firstName,
     lastName,
     uid,
+    role,
     email,
     avatarUrl: `https://api.dicebear.com/9.x/thumbs/svg?seed=${handle}`,
     createdOn: new Date().toString(),

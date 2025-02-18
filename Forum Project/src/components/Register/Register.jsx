@@ -14,7 +14,7 @@ export default function Register() {
     lastName: '',
     email: '',
     password: '',
-    role: 'admin',
+    role: 'user',
   });
 
   const navigate = useNavigate();
