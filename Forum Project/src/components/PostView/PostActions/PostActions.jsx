@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import Comments from '../Comments/Comments';
 import Reply from '../Reply/Reply';
+import './PostActions.css'
 
 const PostActions = ({
   likes,
@@ -9,7 +10,6 @@ const PostActions = ({
   isLogged,
   viewReply,
   toggleViewReply,
-  handleAddReply,
   reply,
 }) => {
   /**
@@ -40,7 +40,7 @@ const PostActions = ({
           {!viewReply ? <>Reply</> : <>Hide Reply</>}
         </button>
       )}
-      {viewReply && <Reply replyContent={handleAddReply} />}
+      {viewReply && <Reply />}
       {viewComments && <Comments onAddReply={reply} />}
     </div>
   );

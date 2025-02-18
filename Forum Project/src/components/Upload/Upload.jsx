@@ -86,6 +86,7 @@ const UploadView = () => {
             onChange={(e) => setTitle(e.target.value)}
             required
           />
+          <span>{title.length}</span>
         </div>
         <div>
           <label htmlFor="content">Content: </label>
@@ -96,6 +97,7 @@ const UploadView = () => {
             onChange={(e) => setContent(e.target.value)}
             required
           />
+          <span>{content.length}</span>
         </div>
         <button type="submit">Submit</button>
       </form>

@@ -39,10 +39,6 @@ const PostView = () => {
     setViewReply(!viewReply);
   };
 
-  const handleAddReply = (newReply) => {
-    setReply([...reply, newReply]);
-  };
-
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -65,7 +61,6 @@ const PostView = () => {
           isLogged={!!user}
           viewReply={viewReply}
           toggleViewReply={toggleViewReply}
-          handleAddReply={handleAddReply}
           reply={reply}
         />
       </div>

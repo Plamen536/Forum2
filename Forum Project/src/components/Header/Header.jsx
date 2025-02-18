@@ -8,10 +8,8 @@ import Logout from '../Logout/Logout';
 export default function Header() {
   const { user } = useContext(AppContext);
 
-  const Test = false;
-
   return (
-    <div className="header">
+    <header className="header">
       {user && <DropdownMenu />}
       <h1>Forum</h1>
       <nav className="navbar">
@@ -26,6 +24,6 @@ export default function Header() {
         {user && <NavLink to="/upload">Upload</NavLink>}
         {user && <Logout />}
       </nav>
-    </div>
+    </header>
   );
 }
