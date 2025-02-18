@@ -1,19 +1,15 @@
 import { Suspense, useContext, useEffect, useState } from 'react';
 import Loading from '../Loading/Loading';
-import { getUserData } from '../../../services/users.service';
 import { AppContext } from '../../store/app.context';
-import { get, onValue, ref } from 'firebase/database';
+import { get, onValue, ref, update } from 'firebase/database';
 import { db } from '../../../config/firebase-config';
 import { useParams } from 'react-router-dom';
 import './Comments.css';
 
 const Comments = () => {
   const { id } = useParams();
+  const { user } = useContext(AppContext);
   const [comments, setComments] = useState([]);
-
-  useEffect(() => {
-    setComments(get(ref(db, `posts/${id}/comments`)));
-  }, []);
 
   useEffect(() => {
     const commentsRef = ref(db, `posts/${id}/comments`);
@@ -24,6 +20,7 @@ const Comments = () => {
           ([id, comment]) => ({
             id,
             ...comment,
+            likes: comment.likes || {}
           })
         );
         setComments(commentList);
@@ -31,14 +28,33 @@ const Comments = () => {
         setComments([]);
       }
     });
-  }, []);
+  }, [id]);
 
-  /**
-   * @function renderCommentsWithBreaks
-   * @description Splits the comments string by newline characters and returns an array of <p> elements.
-   * @param {string} comments - The post comments to be split.
-   * @returns {JSX.Element[]} An array of <p> elements with the split comments.
-   */
+  const handleLikeClick = async (commentId) => {
+    if (!user) return;
+
+    const commentRef = ref(db, `posts/${id}/comments/${commentId}/likes/${user.uid}`);
+    const snapshot = await get(commentRef);
+    
+    const updates = {};
+    if (snapshot.exists()) {
+      // User already liked - remove like
+      updates[`posts/${id}/comments/${commentId}/likes/${user.uid}`] = null;
+    } else {
+      // User hasn't liked - add like
+      updates[`posts/${id}/comments/${commentId}/likes/${user.uid}`] = true;
+    }
+    
+    await update(ref(db), updates);
+  };
+
+  const isLikedByUser = (comment) => {
+    return comment.likes && comment.likes[user?.uid];
+  };
+
+  const getLikesCount = (comment) => {
+    return comment.likes ? Object.keys(comment.likes).length : 0;
+  };
 
   return (
     <Suspense fallback={<Loading />}>
@@ -49,9 +65,18 @@ const Comments = () => {
           <div className="comment-container" key={comment.id}>
             <span className="avatar-icon-container">
               <img className="avatar-icon" src={comment.avatar} alt="avatar" />
+              <i className="upvote">Upvotes: {getLikesCount(comment)}</i>
             </span>
             <div className="comment-content">
-              <h3>{comment.author}</h3>
+              {user && (
+                <button 
+                  onClick={() => handleLikeClick(comment.id)} 
+                  className="like-unlike"
+                >
+                  {isLikedByUser(comment) ? 'Unlike' : 'Like'}
+                </button>
+              )}
+              <h2>{comment.author}</h2>
               <h3>{comment.text}</h3>
             </div>
           </div>
@@ -60,4 +85,5 @@ const Comments = () => {
     </Suspense>
   );
 };
+
 export default Comments;
