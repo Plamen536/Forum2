@@ -66,7 +66,7 @@ export default function Login() {
         </Button>
       </Stack>
       <Text mt={4} fontSize="sm" color="gray.600" textAlign="center">
-        Don't have an account? <Link to="/register" style={{ color: 'blue', textDecoration: 'underline' }}>Sign Up</Link>
+        Don't have an account? <Link to="/register" style={{ color: '#1541ff', textDecoration: 'underline' }}>Sign Up</Link>
       </Text>
     </Box>
   );

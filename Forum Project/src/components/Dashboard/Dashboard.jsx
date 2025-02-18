@@ -79,6 +79,7 @@ const Dashboard = () => {
       {sortedPosts.map((post) => (
         <div key={post.id} className="post">
           <h2>{post.title}</h2>
+          <hr />
           <p>{post.content.length > 100 ? `${post.content.substring(0, 100)}...` : post.content}</p>
           <button onClick={() => handleClick(post.id)}>Details</button>
           {user && (

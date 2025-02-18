@@ -57,7 +57,6 @@ function App() {
     <div>
       <BrowserRouter>
         <AppContext.Provider value={{ ...appState, setAppState }}>
-          <Header />
           <Routes>
             {/* Routes with main layout */}
             <Route element={<MainLayout />}>
