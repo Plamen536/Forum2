@@ -79,7 +79,7 @@ const Dashboard = () => {
       {sortedPosts.map((post) => (
         <div key={post.id} className="post">
           <h2>{post.title}</h2>
-          <p>{post.content}</p>
+          <p>{post.content.length > 100 ? `${post.content.substring(0, 100)}...` : post.content}</p>
           <button onClick={() => handleClick(post.id)}>Details</button>
           {user && (
             <button onClick={() => handleLike(post.id)}>
