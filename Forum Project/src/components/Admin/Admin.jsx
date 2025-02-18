@@ -1,8 +1,8 @@
 import { ref, onValue, getDatabase } from "firebase/database";
 import React, { useEffect, useState } from "react";
 import { Box, Button, Heading, Stack, Text } from '@chakra-ui/react';
+import { update } from "firebase/database";
 
-import "./Admin.css";
 
 export default function Admin() {
     const [users, setUsers] = useState([]);
@@ -25,10 +25,10 @@ export default function Admin() {
         });
     }, []);
 
-    const makeAdmin = (userId) => {
+    const makeAdmin = async (userId) => {
         const db = getDatabase();
         const userRef = ref(db, `users/${userId}`);
-        userRef.update({ role: "admin" })
+        await update(userRef, { role: "admin" })
             .then(() => {
                 console.log("User role updated to admin:", userId);
             })
@@ -37,10 +37,10 @@ export default function Admin() {
             });
     };
 
-    const blockUser = (userId) => {
+    const blockUser = async (userId) => {
         const db = getDatabase();
         const userRef = ref(db, `users/${userId}`);
-        userRef.update({ role: "blocked" })
+        await update(userRef, { role: "blocked" })
             .then(() => {
                 console.log("User blocked:", userId);
             })
@@ -55,7 +55,7 @@ export default function Admin() {
             <Stack spacing={4}>
                 {users.map((user) => (
                     <Box key={user.id} p={4} borderWidth={1} borderRadius="md" shadow="md" bg="white" color="black">
-                        <Text><strong>ID:</strong> {user.id}</Text>
+                        <Text><strong>ID:</strong> {user.handle}</Text>
                         <Text><strong>Name:</strong> {user.firstName} {user.lastName}</Text> {/* Corrected user name */}
                         <Text><strong>Email:</strong> {user.email}</Text>
                         <Stack direction="row" spacing={4} mt={4}>
