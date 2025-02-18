@@ -8,6 +8,20 @@ import { useParams } from 'react-router-dom';
 import { onValue, ref } from 'firebase/database';
 import { db } from '../../config/firebase-config';
 
+/**
+ * @module PostView
+ * @description Main container component for viewing a complete post
+ *
+ * @component
+ *
+ * @example
+ * return (
+ *   <PostView />
+ * )
+ *
+ * @returns {JSX.Element} Complete post view with header, content, and actions
+ */
+
 const PostView = () => {
   const [viewComments, setViewComments] = useState(false);
   const [viewReply, setViewReply] = useState(false);
@@ -39,10 +53,6 @@ const PostView = () => {
     setViewReply(!viewReply);
   };
 
-  const handleAddReply = (newReply) => {
-    setReply([...reply, newReply]);
-  };
-
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -65,7 +75,6 @@ const PostView = () => {
           isLogged={!!user}
           viewReply={viewReply}
           toggleViewReply={toggleViewReply}
-          handleAddReply={handleAddReply}
           reply={reply}
         />
       </div>

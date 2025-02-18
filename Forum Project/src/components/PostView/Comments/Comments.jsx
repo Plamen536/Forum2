@@ -1,37 +1,124 @@
-import { Suspense, useContext, useEffect } from 'react';
+import { Suspense, useContext, useEffect, useState } from 'react';
 import Loading from '../Loading/Loading';
-import { getUserData } from '../../../services/users.service';
 import { AppContext } from '../../store/app.context';
+import { get, onValue, ref, update } from 'firebase/database';
+import { db } from '../../../config/firebase-config';
+import { useParams } from 'react-router-dom';
+import './Comments.css';
+
+/**
+ * @module Comments
+ * @description A component that displays and manages comments for a post
+ * 
+ * @component
+ * @param {object} props
+ * @param {string} props.id - Post ID from URL parameters
+ * @param {object} props.user - Current user object from context
+ * 
+ * @example
+ * return (
+ *   <Comments />
+ * )
+ * 
+ * @returns {JSX.Element} Comments section with like functionality and sorting
+ */
 
 const Comments = () => {
-  
-  const comment = {
-    name: 'John Doe',
-    comment: 'This is a comment This is on new line comment',
+  const { id } = useParams();
+  const { user } = useContext(AppContext);
+  const [comments, setComments] = useState([]);
+  const [sortByLikes, setSortByLikes] = useState(false);
+
+  useEffect(() => {
+    const commentsRef = ref(db, `posts/${id}/comments`);
+    onValue(commentsRef, (snapshot) => {
+      const commentsData = snapshot.val();
+      if (commentsData) {
+        const commentList = Object.entries(commentsData).map(
+          ([id, comment]) => ({
+            id,
+            ...comment,
+            likes: comment.likes || {},
+          })
+        );
+        setComments(commentList);
+      } else {
+        setComments([]);
+      }
+    });
+  }, [id]);
+
+  const handleLikeClick = async (commentId) => {
+    if (!user) return;
+
+    const commentRef = ref(
+      db,
+      `posts/${id}/comments/${commentId}/likes/${user.uid}`
+    );
+    const snapshot = await get(commentRef);
+
+    const updates = {};
+    if (snapshot.exists()) {
+      // User already liked - remove like
+      updates[`posts/${id}/comments/${commentId}/likes/${user.uid}`] = null;
+    } else {
+      // User hasn't liked - add like
+      updates[`posts/${id}/comments/${commentId}/likes/${user.uid}`] = true;
+    }
+
+    await update(ref(db), updates);
   };
 
-  /**
-   * @function renderCommentsWithBreaks
-   * @description Splits the comments string by newline characters and returns an array of <p> elements.
-   * @param {string} comments - The post comments to be split.
-   * @returns {JSX.Element[]} An array of <p> elements with the split comments.
-   */
-  const renderCommentsWithBreaks = (comment) => {
-    return comment
-      .split('\n')
-      .map((line, index) => <span key={index}>{line}</span>);
+  const isLikedByUser = (comment) => {
+    return comment.likes && comment.likes[user?.uid];
   };
+
+  const getLikesCount = (comment) => {
+    return comment.likes ? Object.keys(comment.likes).length : 0;
+  };
+
+  const sortedComments = sortByLikes
+    ? [...comments].sort((a, b) => getLikesCount(b) - getLikesCount(a))
+    : comments;
 
   return (
     <Suspense fallback={<Loading />}>
       <div className="comments">
         <h2>Comments</h2>
+        <div className="comments-header">
+          <label className="sort-checkbox">
+            <input
+              type="checkbox"
+              checked={sortByLikes}
+              onChange={(e) => setSortByLikes(e.target.checked)}
+            />
+            Sort by most liked
+          </label>
+        </div>
         <hr />
-        <h3>{comment.name}</h3>
-        {renderCommentsWithBreaks(comment.comment)}
-        <hr />
+        {sortedComments.map((comment) => (
+          <div className="comment-container" key={comment.id}>
+            <span className="avatar-icon-container">
+              <img className="avatar-icon" src={comment.avatar} alt="avatar" />
+              <i className="upvote">Upvotes: {getLikesCount(comment)}</i>
+            </span>
+            <div className="comment-content">
+              {user && (
+                <button
+                  onClick={() => handleLikeClick(comment.id)}
+                  className="like-unlike"
+                >
+                  {isLikedByUser(comment) ? 'Unlike' : 'Like'}
+                </button>
+              )}
+              <h2>{comment.author}</h2>
+              <h3>{comment.text}</h3>
+            </div>
+          </div>
+        ))}
       </div>
     </Suspense>
   );
 };
+
 export default Comments;

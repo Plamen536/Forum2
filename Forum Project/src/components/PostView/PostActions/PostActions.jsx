@@ -1,6 +1,37 @@
 import PropTypes from 'prop-types';
 import Comments from '../Comments/Comments';
 import Reply from '../Reply/Reply';
+import './PostActions.css';
+
+/**
+ * @module PostActions
+ * @description Handles post interaction actions like comments and replies
+ *
+ * @component
+ * @param {object} props
+ * @param {number} props.likes - Number of likes on the post
+ * @param {boolean} props.viewComments - Flag to show/hide comments
+ * @param {Function} props.toggleViewComments - Function to toggle comments visibility
+ * @param {boolean} props.isLogged - User login status
+ * @param {boolean} props.viewReply - Flag to show/hide reply section
+ * @param {Function} props.toggleViewReply - Function to toggle reply visibility
+ * @param {Array} props.reply - Array of replies
+ *
+ * @example
+ * return (
+ *   <PostActions
+ *     likes={5}
+ *     viewComments={false}
+ *     toggleViewComments={() => {}}
+ *     isLogged={true}
+ *     viewReply={false}
+ *     toggleViewReply={() => {}}
+ *     reply={[]}
+ *   />
+ * )
+ *
+ * @returns {JSX.Element} Post actions container with comments and reply options
+ */
 
 const PostActions = ({
   likes,
@@ -9,7 +40,6 @@ const PostActions = ({
   isLogged,
   viewReply,
   toggleViewReply,
-  handleAddReply,
   reply,
 }) => {
   /**
@@ -40,7 +70,7 @@ const PostActions = ({
           {!viewReply ? <>Reply</> : <>Hide Reply</>}
         </button>
       )}
-      {viewReply && <Reply replyContent={handleAddReply} />}
+      {viewReply && <Reply />}
       {viewComments && <Comments onAddReply={reply} />}
     </div>
   );

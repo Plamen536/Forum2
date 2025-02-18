@@ -1,3 +1,21 @@
+import './PostContent.css';
+
+/**
+ * @module PostContent
+ * @description Displays the main content of a post with proper formatting
+ *
+ * @component
+ * @param {object} props
+ * @param {string} props.content - The main text content of the post
+ *
+ * @example
+ * return (
+ *   <PostContent content="This is the post content" />
+ * )
+ *
+ * @returns {JSX.Element} Formatted post content with line breaks
+ */
+
 const PostContent = ({ content }) => {
   /**
    * @function renderContentWithBreaks
@@ -10,6 +28,6 @@ const PostContent = ({ content }) => {
     return content.split('\n').map((line, index) => <p key={index}>{line}</p>);
   };
 
-  return <div className="postContent">{renderContentWithBreaks(content)}</div>;
+  return <article className="postContent">{renderContentWithBreaks(content)}</article>;
 };
 export default PostContent;
