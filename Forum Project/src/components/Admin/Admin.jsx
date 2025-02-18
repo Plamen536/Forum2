@@ -49,6 +49,18 @@ export default function Admin() {
             });
     };
 
+    const unblockUser = async (userId) => {
+        const db = getDatabase();
+        const userRef = ref(db, `users/${userId}`);
+        await update(userRef, { role: "user" })
+            .then(() => {
+                console.log("User unblocked:", userId);
+            })
+            .catch((error) => {
+                console.error("Error unblocking the user:", error);
+            });
+    }
+
     return (
         <Box className="admin-dashboard" p={4} bgGradient="linear(to-r, teal.500, green.500)" color="white">
             <Heading as="h1" size="xl" mb={6}>Admin Dashboard</Heading>
@@ -59,8 +71,16 @@ export default function Admin() {
                         <Text><strong>Name:</strong> {user.firstName} {user.lastName}</Text> {/* Corrected user name */}
                         <Text><strong>Email:</strong> {user.email}</Text>
                         <Stack direction="row" spacing={4} mt={4}>
-                            <Button onClick={() => makeAdmin(user.id)} bg="blue" colorScheme="blue" size="sm">Make Admin</Button>
-                            <Button onClick={() => blockUser(user.id)} bg="blue" colorScheme="red" size="sm">Block User</Button>
+                            {user.role === 'admin' ? (
+                                <Text>User is already an admin and you can't block an admin!</Text>
+                            ) : (
+                                <Button onClick={() => makeAdmin(user.id)} bg="blue" colorScheme="blue" size="sm">Make Admin</Button>
+                            )}
+                            {user.role === 'user' ? (
+                                <Button onClick={() => blockUser(user.id)} bg="blue" colorScheme="red" size="sm">Block User</Button>
+                            ) : user.role === 'blocked' ? (
+                                <Button onClick={() => unblockUser(user.id)} bg="blue" colorScheme="green" size="sm">Unblock User</Button>
+                            ) : null}
                         </Stack>
                     </Box>
                 ))}
