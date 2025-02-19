@@ -15,6 +15,7 @@ const Dashboard = () => {
     const postsRef = ref(db, 'posts');
     onValue(postsRef, (snapshot) => {
       const postsData = snapshot.val();
+      console.log('Fetched posts data:', postsData); // Debugging log
       if (postsData) {
         const postList = Object.entries(postsData).map(([id, post]) => ({
           id,
