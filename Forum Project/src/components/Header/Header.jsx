@@ -3,6 +3,8 @@ import { useContext } from 'react';
 import { AppContext } from '../store/app.context';
 import { Box, Button, Container, Flex, Heading, Stack } from '@chakra-ui/react';
 import DropdownMenu from './DropdownMenu/DropdownMenu';
+import Search from '../Search/Search';
+import './Header.css';
 
 export default function Header() {
   const { user } = useContext(AppContext);
@@ -12,9 +14,11 @@ export default function Header() {
       <Container maxW="container.xl">
         <Flex align="center" justify="space-between">
           <Heading as="h1" size="lg">
-            <NavLink to="/">Forum</NavLink>
-          </Heading>
-          <nav>
+          <NavLink to="/">Forum</NavLink> 
+            </Heading>
+            <Flex flex="1" justify="center" mx={4}>
+            <Search /> 
+            </Flex>
             <Stack direction="row" spacing={6} align="center">
               <NavLink to="/dashboard">
                 <Button variant="link" color="white">
@@ -51,7 +55,7 @@ export default function Header() {
                 </>
               )}
             </Stack>
-          </nav>
+          
         </Flex>
       </Container>
     </Box>
