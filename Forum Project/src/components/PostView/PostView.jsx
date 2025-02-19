@@ -60,7 +60,7 @@ const PostView = () => {
   if (!post) {
     return <div>Post not found</div>;
   }
-
+  
   return (
     <div className="postView">
       <div className="postViewUser">

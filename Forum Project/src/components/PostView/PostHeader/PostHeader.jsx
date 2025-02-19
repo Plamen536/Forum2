@@ -5,12 +5,18 @@ import { AppContext } from '../../store/app.context';
 import { ref, get, update } from 'firebase/database';
 import { db } from '../../../config/firebase-config';
 import { useParams } from 'react-router-dom';
+import { Box, Button, Input, Textarea } from '@chakra-ui/react';
+import { getUserData } from '@/services/users.service';
 
-const PostHeader = ({ user, title, isAdmin }) => {
+const PostHeader = ({ user, title, content, isAdmin }) => {
   const navigate = useNavigate();
   const { user: currentUser } = useContext(AppContext);
   const [likesCount, setLikesCount] = useState(0);
   const [isLiked, setIsLiked] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editTitle, setEditTitle] = useState(title);
+  const [editContent, setEditContent] = useState(content);
+  const [userHandle, setUserHandle] = useState();
   const { id } = useParams();
 
   useEffect(() => {
@@ -26,6 +32,12 @@ const PostHeader = ({ user, title, isAdmin }) => {
     }
   }, [id, currentUser]);
 
+  useEffect(() => {
+    getUserData(currentUser.uid)
+      .then((data) => data[Object.keys(data)])
+      .then((data) => setUserHandle(data.handle));
+  }, []);
+
   const handleLike = async () => {
     if (!currentUser) return;
 
@@ -34,14 +46,28 @@ const PostHeader = ({ user, title, isAdmin }) => {
 
     if (isLiked) {
       updates[`posts/${id}/likes/${currentUser.uid}`] = null;
-      setLikesCount(prev => prev - 1);
+      setLikesCount((prev) => prev - 1);
     } else {
       updates[`posts/${id}/likes/${currentUser.uid}`] = true;
-      setLikesCount(prev => prev + 1);
+      setLikesCount((prev) => prev + 1);
     }
 
     await update(ref(db), updates);
     setIsLiked(!isLiked);
+  };
+
+  const handleSaveEdit = async () => {
+    try {
+      const updates = {};
+      updates[`posts/${id}/title`] = editTitle;
+      updates[`posts/${id}/content`] = editContent;
+
+      await update(ref(db), updates);
+      setIsEditing(false);
+    } catch (error) {
+      console.error('Error updating post:', error);
+      alert('Failed to update post');
+    }
   };
 
   return (
@@ -50,12 +76,48 @@ const PostHeader = ({ user, title, isAdmin }) => {
         <button onClick={() => navigate(-1)}>{'← Back'}</button>
         {currentUser && (
           <button onClick={handleLike}>
-            {isLiked ? 'Unlike' : 'Like'} ({likesCount})
+            {isLiked ? 'Unlike:' : 'Like:'} {likesCount}
+          </button>
+        )}
+        {currentUser && user === userHandle && (
+          <button onClick={() => setIsEditing(!isEditing)}>
+            {isEditing ? 'Cancel' : 'Edit'}
           </button>
         )}
       </div>
-      <h2>Author: {user}</h2>
-      <h1>{title}</h1>
+
+      {isEditing ? (
+        <Box p={4}>
+          <Input
+            value={editTitle}
+            onChange={(e) => setEditTitle(e.target.value)}
+            placeholder="Edit title..."
+            mb={3}
+          />
+          <Textarea
+            value={editContent}
+            onChange={(e) => setEditContent(e.target.value)}
+            placeholder="Edit content..."
+            mb={3}
+          />
+          <Button onClick={handleSaveEdit} colorScheme="teal" size="sm" mr={2}>
+            Save
+          </Button>
+          <Button
+            onClick={() => setIsEditing(false)}
+            colorScheme="gray"
+            size="sm"
+          >
+            Cancel
+          </Button>
+        </Box>
+      ) : (
+        <>
+          <h2>Author: {user}</h2>
+          <h1>{title}</h1>
+        </>
+      )}
+
       {isAdmin && <button>Delete Post</button>}
       <hr />
     </div>
