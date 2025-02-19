@@ -170,7 +170,9 @@ const ProfileView = () => {
                 {post.title}
               </Heading>
               <Text noOfLines={2} mb={3} color="gray.600">
-                {post.content}
+                {post.content.length > 100
+                  ? `${post.content.substring(0, 100)}...`
+                  : post.content}
               </Text>
               <Text fontSize="sm" color="gray.500">
                 Posted on: {new Date(post.createdOn).toLocaleDateString()}
