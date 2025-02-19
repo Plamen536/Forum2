@@ -5,6 +5,8 @@ import { push, ref } from 'firebase/database';
 import { useParams } from 'react-router-dom';
 import { db } from '../../../config/firebase-config';
 import './Reply.css'
+import { Box, Button, FormControl, FormLabel, Textarea } from '@chakra-ui/react';
+
 
 /**
  * @module Reply
@@ -71,23 +73,35 @@ const Reply = () => {
   };
 
   return (
-    <div className='reply-form'>
+    <Box bg="gray.800" color="white" p={6} borderRadius="md" w="full">
       <form onSubmit={handleReplySubmit}>
-        <label htmlFor="postComment">Enter text: </label>
-        <br />
-        <textarea
-          onChange={handleReplayChange}
-          value={reply}
-          name="postComment"
-          id="postComment"
-          rows={1}
-        />
-        <br />
-        <br />
-        <button onSubmit={handleReplySubmit}>Submit</button>
+        <FormControl id="postComment">
+          <FormLabel color="gray.400">Enter text:</FormLabel>
+          <Textarea
+            onChange={handleReplayChange}
+            value={reply}
+            placeholder="Write your reply here..."
+            rows={4}
+            bg="gray.700"
+            color="white"
+            borderColor="gray.600"
+            _hover={{ borderColor: 'gray.500' }}
+            _focus={{ borderColor: 'teal.400' }}
+          />
+        </FormControl>
+        <Button
+          type="submit"
+          mt={4}
+          colorScheme="teal"
+          variant="solid"
+          w="full"
+        >
+          Submit
+        </Button>
       </form>
-    </div>
+    </Box>
   );
+  
 };
 
 export default Reply;

@@ -1,11 +1,10 @@
-import './PostHeader.css';
 import { useNavigate } from 'react-router-dom';
 import { useContext, useEffect, useState } from 'react';
 import { AppContext } from '../../store/app.context';
 import { ref, get, update } from 'firebase/database';
 import { db } from '../../../config/firebase-config';
 import { useParams } from 'react-router-dom';
-import { Box, Button, Input, Textarea } from '@chakra-ui/react';
+import { Box, Button, Input, Textarea, Text } from '@chakra-ui/react';
 import { getUserData } from '@/services/users.service';
 
 const PostHeader = ({ user, title, content, isAdmin }) => {
@@ -114,59 +113,67 @@ const PostHeader = ({ user, title, content, isAdmin }) => {
   };
 
   return (
-    <div className="postHeader">
-      <div className="headerButtons">
-        <button onClick={() => navigate(-1)}>{'← Back'}</button>
+    <Box className="postHeader" bg="gray.800" color="white" p={6} borderRadius="md">
+      <Box className="headerButtons" mb={4}>
+        <Button onClick={() => navigate(-1)} colorScheme="teal" variant="outline" mr={2}>
+          {'← Back'}
+        </Button>
         {currentUser && (
-          <button onClick={handleLike}>
+          <Button onClick={handleLike} colorScheme="teal" variant="outline" mr={2}>
             {isLiked ? 'Unlike:' : 'Like:'} {likesCount}
-          </button>
+          </Button>
         )}
         {currentUser && user === userHandle && (
-          <button onClick={() => setIsEditing(!isEditing)}>
+          <Button onClick={() => setIsEditing(!isEditing)} colorScheme="blue" variant="outline">
             {isEditing ? 'Cancel' : 'Edit'}
-          </button>
+          </Button>
         )}
-      </div>
+      </Box>
 
       {isEditing ? (
-        <Box p={4}>
+        <Box p={4} bg="gray.700" borderRadius="md">
           <Input
             value={editTitle}
             onChange={(e) => setEditTitle(e.target.value)}
             placeholder="Edit title..."
             mb={3}
+            bg="gray.600"
+            color="white"
+            _focus={{ borderColor: 'teal.400' }}
           />
           <Textarea
             value={editContent}
             onChange={(e) => setEditContent(e.target.value)}
             placeholder="Edit content..."
             mb={3}
+            bg="gray.600"
+            color="white"
+            _focus={{ borderColor: 'teal.400' }}
           />
           <Button onClick={handleSaveEdit} colorScheme="teal" size="sm" mr={2}>
             Save
           </Button>
-          <Button
-            onClick={() => setIsEditing(false)}
-            colorScheme="gray"
-            size="sm"
-          >
+          <Button onClick={() => setIsEditing(false)} colorScheme="gray" size="sm">
             Cancel
           </Button>
         </Box>
       ) : (
-        <>
-          <h2>Author: {user}</h2>
-          <h1>{title}</h1>
-        </>
+        <Box mb={4}>
+          <Text fontSize="xl" fontWeight="bold" mb={1}>
+            Author: {user}
+          </Text>
+          <Text fontSize="2xl" fontWeight="bold" mb={1}>
+            {title}
+          </Text>
+        </Box>
       )}
+
       {(isAdmin || user === userHandle) && (
-        <button onClick={deletePost} style={{ backgroundColor: '#dc3545' }}>
+        <Button onClick={deletePost} colorScheme="red" variant="outline">
           Delete Post
-        </button>
+        </Button>
       )}
-      <hr />
-    </div>
+    </Box>
   );
 };
 

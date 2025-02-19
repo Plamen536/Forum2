@@ -1,15 +1,16 @@
 import { useNavigate } from 'react-router-dom';
 import React, { useState, useEffect, useContext } from 'react';
 import { ref, onValue, get, update } from 'firebase/database';
-import './Dashboard.css';
+import { Box, Text, Button, Stack, Heading, Flex } from '@chakra-ui/react';
 import { AppContext } from '../store/app.context';
 import { db } from '../../config/firebase-config';
 
 const Dashboard = () => {
   const [posts, setPosts] = useState([]);
-  const [sortByLikes, setSortByLikes] = useState(false);
   const { user } = useContext(AppContext);
+  const navigate = useNavigate();
 
+  // Fetch posts from Firebase
   useEffect(() => {
     const postsRef = ref(db, 'posts');
     onValue(postsRef, (snapshot) => {
@@ -26,12 +27,12 @@ const Dashboard = () => {
     });
   }, []);
 
-  const navigate = useNavigate();
-
+  // Navigate to the post detail page
   const handleClick = (postId) => {
     navigate(`/post/${postId}`);
   };
 
+  // Handle like/unlike action
   const handleLike = async (postId) => {
     if (!user) return;
 
@@ -48,50 +49,76 @@ const Dashboard = () => {
     await update(ref(db), updates);
   };
 
+  // Check if the user has liked the post
   const isLikedByUser = (post) => {
     return post.likes && post.likes[user?.uid];
   };
 
+  // Get the number of likes
   const getLikesCount = (post) => {
     return post.likes ? Object.keys(post.likes).length : 0;
   };
 
+  // Format the date to a readable format
   const formatDate = (dateString) => {
     return new Date(dateString).toISOString().split('T')[0];
   };
 
-  const sortedPosts = sortByLikes 
-    ? [...posts].sort((a, b) => getLikesCount(b) - getLikesCount(a))
-    : posts;
-
   return (
-    <div className="dashboard">
-      <h1>Posts</h1>
-      <label>
-          <input
-            type="checkbox"
-            checked={sortByLikes}
-            onChange={(e) => setSortByLikes(e.target.checked)}
-          />
-          Sort by most liked
-        </label>
-      <hr />
-      {sortedPosts.map((post) => (
-        <div key={post.id} className="post">
-          <h2>{post.title}</h2>
-          <hr />
-          <p>{post.content.length > 100 ? `${post.content.substring(0, 100)}...` : post.content}</p>
-          <button onClick={() => handleClick(post.id)}>Details</button>
-          {user && (
-            <button onClick={() => handleLike(post.id)}>
-              {isLikedByUser(post) ? 'Unlike' : 'Like'}
-            </button>
-          )}
-          <h4>Likes: {getLikesCount(post)}</h4>
-          <h4>Date: {formatDate(post.createdOn)}</h4>
-        </div>
-      ))}
-    </div>
+    <Box p={5} w="100%" display="flex" justifyContent="center" minHeight="100vh">
+      <Stack spacing={8} w="80%" mt={4}>
+        {posts.map((post) => (
+          <Box
+            key={post.id}
+            p={6}
+            bg="gray.700"
+            borderRadius="lg"
+            boxShadow="lg"
+            transition="transform 0.2s"
+            _hover={{ transform: 'scale(1.05)', bg: 'gray.600' }}
+          >
+            <Heading
+              as="h2"
+              size="xl"
+              mb={4}
+              onClick={() => handleClick(post.id)}
+              _hover={{ cursor: 'pointer', color: 'blue.400' }}
+            >
+              {post.title}
+            </Heading>
+            <Text noOfLines={3} mb={5} fontSize="lg">
+              {post.content}
+            </Text>
+            <Flex align="center" justify="space-between">
+              <Flex>
+                <Button
+                  onClick={() => handleClick(post.id)}
+                  colorScheme="teal"
+                  variant="solid"
+                  size="md"
+                  mr={2}
+                >
+                  View Details
+                </Button>
+                {user && (
+                  <Button
+                    onClick={() => handleLike(post.id)}
+                    colorScheme={isLikedByUser(post) ? 'red' : 'teal'}
+                    variant="solid"
+                    size="md"
+                  >
+                    {isLikedByUser(post) ? 'Unlike' : 'Like'}
+                  </Button>
+                )}
+              </Flex>
+            </Flex>
+            <Text mt={4} fontSize="md" color="gray.400">
+              Likes: {getLikesCount(post)} | Posted on {formatDate(post.createdOn)}
+            </Text>
+          </Box>
+        ))}
+      </Stack>
+    </Box>
   );
 };
 

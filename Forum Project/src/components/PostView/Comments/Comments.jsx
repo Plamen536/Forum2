@@ -1,12 +1,19 @@
-import { Suspense, useContext, useEffect, useMemo, useState } from 'react';
-import Loading from '../Loading/Loading';
-import { AppContext } from '../../store/app.context';
-import { get, onValue, ref, update } from 'firebase/database';
-import { db } from '../../../config/firebase-config';
-import { useParams } from 'react-router-dom';
-import './Comments.css';
-import { getUserData } from '@/services/users.service';
-import { Box, Button, Textarea } from '@chakra-ui/react';
+import { Suspense, useContext, useEffect, useMemo, useState } from "react";
+import Loading from "../Loading/Loading";
+import { AppContext } from "../../store/app.context";
+import { get, onValue, ref, update } from "firebase/database";
+import { db } from "../../../config/firebase-config";
+import { useParams } from "react-router-dom";
+import "./Comments.css";
+import { getUserData } from "@/services/users.service";
+import {
+  Box,
+  Button,
+  Textarea,
+  Checkbox,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
 
 /**
  * @module Comments
@@ -31,7 +38,7 @@ const Comments = () => {
   const [comments, setComments] = useState([]);
   const [sortByLikes, setSortByLikes] = useState(false);
   const [editingCommentId, setEditingCommentId] = useState(null);
-  const [editText, setEditText] = useState('');
+  const [editText, setEditText] = useState("");
   const [userHandle, setUserHandle] = useState();
 
   useEffect(() => {
@@ -58,7 +65,7 @@ const Comments = () => {
       getUserData(user.uid)
         .then((data) => data[Object.keys(data)])
         .then((data) => setUserHandle(data.handle))
-        .catch((error) => console.error('Error fetching user data:', error));
+        .catch((error) => console.error("Error fetching user data:", error));
     }
   }, [user?.uid]);
 
@@ -74,10 +81,10 @@ const Comments = () => {
     try {
       await update(ref(db), updates);
       setEditingCommentId(null);
-      setEditText('');
+      setEditText("");
     } catch (error) {
-      console.error('Error updating comment:', error);
-      alert('Failed to update comment');
+      console.error("Error updating comment:", error);
+      alert("Failed to update comment");
     }
   };
 
@@ -100,8 +107,8 @@ const Comments = () => {
 
       await update(ref(db), updates);
     } catch (error) {
-      console.error('Error updating like:', error);
-      alert('Failed to update like');
+      console.error("Error updating like:", error);
+      alert("Failed to update like");
     }
   };
 
@@ -121,75 +128,111 @@ const Comments = () => {
 
   return (
     <Suspense fallback={<Loading />}>
-      <div className="comments">
-        <h2>Comments</h2>
-        <div className="comments-header">
-          <label className="sort-checkbox">
-            <input
-              type="checkbox"
-              checked={sortByLikes}
+      <Box bg="gray.800" color="white" p={6} borderRadius="md">
+        <VStack spacing={6} align="start">
+          <Text fontSize="2xl" fontWeight="bold">
+            Comments
+          </Text>
+          <Box w="full" display="flex" alignItems="center" mb={4}>
+            <Checkbox
+              isChecked={sortByLikes}
               onChange={(e) => setSortByLikes(e.target.checked)}
-            />
-            Sort by most liked
-          </label>
-        </div>
-        <hr />
-        {sortedComments.map((comment) => (
-          <div className="comment-container" key={comment.id}>
-            <span className="avatar-icon-container">
-              <img className="avatar-icon" src={comment.avatar} alt="avatar" />
-              <i className="upvote">Upvotes: {getLikesCount(comment)}</i>
-            </span>
-            <div className="comment-content">
-              {user && (
-                <div>
-                  <button
-                    onClick={() => handleLikeClick(comment.id)}
-                    className="like-unlike"
-                  >
-                    {isLikedByUser(comment) ? 'Unlike' : 'Like'}
-                  </button>
-                  {/* Only show edit button if the comment author matches current user */}
-                  {user && userHandle === comment.author && (
-                    <button onClick={() => handleEditClick(comment)}>
-                      Edit
-                    </button>
-                  )}
-                </div>
-              )}
-              <h2>{comment.author}</h2>
-              {editingCommentId === comment.id ? (
-                <Box>
-                  <Textarea
-                    value={editText}
-                    onChange={(e) => setEditText(e.target.value)}
-                    placeholder="Edit your comment..."
-                  />
-                  <Button
-                    onClick={() => handleSaveEdit(comment.id)}
-                    colorScheme="teal"
-                    size="sm"
-                    mt={2}
-                  >
-                    Save
-                  </Button>
-                  <Button
-                    onClick={() => setEditingCommentId(null)}
-                    colorScheme="gray"
-                    size="sm"
-                    mt={2}
-                    ml={2}
-                  >
-                    Cancel
-                  </Button>
-                </Box>
-              ) : (
-                <h3>{comment.text}</h3>
-              )}
-            </div>
-          </div>
-        ))}
-      </div>
+              colorScheme="teal"
+            >
+              Sort by most liked
+            </Checkbox>
+          </Box>
+          <hr />
+          {sortedComments.map((comment) => (
+            
+            <Box
+              key={comment.id}
+              p={4}
+              borderWidth={1}
+              borderRadius="md"
+              bg="gray.700"
+              mb={4}
+              width="75%"
+              justifyContent="center"
+              
+            >
+              <Box display="flex" alignItems="center" mb={2}>
+                <img
+                  className="avatar-icon"
+                  src={comment.avatar}
+                  alt="avatar"
+                  width="40"
+                  height="40"
+                />
+                <Text ml={2} color="gray.400">
+                  {comment.author}
+                </Text>
+                <Text ml={2} fontSize="sm" color="gray.500">
+                  Upvotes: {getLikesCount(comment)}
+                </Text>
+              </Box>
+              <Box mb={2}>
+                {user && (
+                  <Box display="flex" mb={2}>
+                    <Button
+                      onClick={() => handleLikeClick(comment.id)}
+                      colorScheme="teal"
+                      size="sm"
+                      variant="outline"
+                      mr={2}
+                    >
+                      {isLikedByUser(comment) ? "Unlike" : "Like"}
+                    </Button>
+                    {user && userHandle === comment.author && (
+                      <Button
+                        onClick={() => handleEditClick(comment)}
+                        colorScheme="blue"
+                        size="sm"
+                        variant="outline"
+                      >
+                        Edit
+                      </Button>
+                    )}
+                  </Box>
+                )}
+                {editingCommentId === comment.id ? (
+                  <Box>
+                    <Textarea
+                      value={editText}
+                      onChange={(e) => setEditText(e.target.value)}
+                      placeholder="Edit your comment..."
+                      bg="gray.600"
+                      color="white"
+                      borderColor="gray.500"
+                      _hover={{ borderColor: "gray.400" }}
+                      _focus={{ borderColor: "teal.400" }}
+                    />
+                    <Button
+                      onClick={() => handleSaveEdit(comment.id)}
+                      colorScheme="teal"
+                      size="sm"
+                      mt={2}
+                    >
+                      Save
+                    </Button>
+                    <Button
+                      onClick={() => setEditingCommentId(null)}
+                      colorScheme="gray"
+                      size="sm"
+                      mt={2}
+                      ml={2}
+                    >
+                      Cancel
+                    </Button>
+                  </Box>
+                ) : (
+                  <Text fontSize="md">{comment.text}</Text>
+                )}
+              </Box>
+            </Box>
+          ))}
+        </VStack>
+      </Box>
     </Suspense>
   );
 };

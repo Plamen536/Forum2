@@ -20,6 +20,15 @@ export default function Register() {
   const navigate = useNavigate();
 
   const register = async () => {
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+ 
+ 
+  if (!emailRegex.test(user.email)) {
+      return alert("Please enter a valid email address");
+    }
+ 
+
     if (
       !user.handle ||
       !user.email ||
