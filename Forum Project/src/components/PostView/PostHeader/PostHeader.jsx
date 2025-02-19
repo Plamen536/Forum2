@@ -27,6 +27,9 @@ const PostHeader = ({ user, title, content, isAdmin }) => {
           const likes = snapshot.val();
           setLikesCount(Object.keys(likes).length);
           setIsLiked(!!likes[currentUser?.uid]);
+        } else {
+          setLikesCount(0);
+          setIsLiked(false);
         }
       });
     }
@@ -36,7 +39,25 @@ const PostHeader = ({ user, title, content, isAdmin }) => {
     getUserData(currentUser.uid)
       .then((data) => data[Object.keys(data)])
       .then((data) => setUserHandle(data.handle));
-  }, []);
+  }, [currentUser]);
+
+  const deletePost = async () => {
+    if (!window.confirm('Are you sure you want to delete this post?')) {
+      return;
+    }
+
+    try {
+      const updates = {};
+      updates[`posts/${id}`] = null;
+      updates[`users/${user}/posts/${id}`] = null;
+
+      await update(ref(db), updates);
+      navigate('/dashboard');
+    } catch (error) {
+      console.error('Error deleting post:', error);
+      alert('Failed to delete post');
+    }
+  };
 
   const handleLike = async () => {
     if (!currentUser) return;
@@ -57,16 +78,38 @@ const PostHeader = ({ user, title, content, isAdmin }) => {
   };
 
   const handleSaveEdit = async () => {
-    try {
-      const updates = {};
-      updates[`posts/${id}/title`] = editTitle;
-      updates[`posts/${id}/content`] = editContent;
+    const updates = {};
+    const isTitleValid =
+      editTitle && editTitle.length >= 16 && editTitle.length <= 32;
+    const isContentValid =
+      editContent && editContent.length >= 32 && editContent.length <= 8192;
 
-      await update(ref(db), updates);
-      setIsEditing(false);
-    } catch (error) {
-      console.error('Error updating post:', error);
-      alert('Failed to update post');
+    let hasValidChanges = false;
+
+    if (isTitleValid) {
+      updates[`posts/${id}/title`] = editTitle;
+      updates[`users/${user}/posts/${id}/title`] = editTitle;
+      hasValidChanges = true;
+    } else if (editTitle && editTitle.trim().length > 0) {
+      alert(`Title must be between 16 and 32 symbols`);
+    }
+
+    if (isContentValid) {
+      updates[`posts/${id}/content`] = editContent;
+      updates[`users/${user}/posts/${id}/content`] = editContent;
+      hasValidChanges = true;
+    } else if (editContent && editContent.trim().length > 0) {
+      alert(`Content must be between 32 and 8192 symbols`);
+    }
+
+    if (hasValidChanges) {
+      try {
+        await update(ref(db), updates);
+        setIsEditing(false);
+      } catch (error) {
+        console.error('Error updating post:', error);
+        alert('Failed to update post');
+      }
     }
   };
 
@@ -117,8 +160,11 @@ const PostHeader = ({ user, title, content, isAdmin }) => {
           <h1>{title}</h1>
         </>
       )}
-
-      {isAdmin && <button>Delete Post</button>}
+      {(isAdmin || user === userHandle) && (
+        <button onClick={deletePost} style={{ backgroundColor: '#dc3545' }}>
+          Delete Post
+        </button>
+      )}
       <hr />
     </div>
   );

@@ -36,11 +36,6 @@ const DropdownMenu = () => {
                 Your profile
               </Button>
             </NavLink>
-            <NavLink to="/your-posts">
-              <Button variant="link" color="black" w="100%" textAlign="left">
-                Your posts
-              </Button>
-            </NavLink>
             <Button variant="link" color="black" w="100%" textAlign="left" isDisabled>
               Status: {!isAdmin ? 'User ✅' : 'Admin 👑'}
             </Button>

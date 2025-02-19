@@ -16,7 +16,6 @@ import ProfileView from './components/ProfileLayout/ProfileView/ProfileView';
 import MainLayout from './components/MainLayout/MainLayout';
 import './App.css';
 import Admin from './components/Admin/Admin';
-import Header from './components/Header/Header';
 
 function App() {
   const [appState, setAppState] = useState({
