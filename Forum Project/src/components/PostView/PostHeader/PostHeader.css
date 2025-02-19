@@ -46,3 +46,9 @@
   margin: 15px 0;
   width: 100%;
 }
+
+.headerButtons {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
