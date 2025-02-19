@@ -1,4 +1,8 @@
 const SearchResults = ({ results }) => {
+    if (!Array.isArray(results)) {
+        return <div className="search-results"></div>;
+      }
+
     return (
         <div className="search-results">
             {results.map((article, index) => (
