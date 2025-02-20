@@ -4,21 +4,20 @@ import { getUserData } from '../../../services/users.service';
 import { push, ref } from 'firebase/database';
 import { useParams } from 'react-router-dom';
 import { db } from '../../../config/firebase-config';
-import './Reply.css'
-import { Box, Button, FormControl, FormLabel, Textarea } from '@chakra-ui/react';
-
+import './Reply.css';
+import { Box, Button, Textarea, FormControl, FormLabel } from '@chakra-ui/react';
 
 /**
  * @module Reply
  * @description Component for adding replies to posts
- * 
+ *
  * @component
- * 
+ *
  * @example
  * return (
  *   <Reply />
  * )
- * 
+ *
  * @returns {JSX.Element} Reply form with text input and submit button
  */
 
@@ -72,6 +71,10 @@ const Reply = () => {
     replySubmit();
   };
 
+  if (isLoading) {
+    return <>Loading...</>;
+  }
+
   return (
     <Box bg="gray.800" color="white" p={6} borderRadius="md" w="full">
       <form onSubmit={handleReplySubmit}>
@@ -101,7 +104,6 @@ const Reply = () => {
       </form>
     </Box>
   );
-  
 };
 
 export default Reply;

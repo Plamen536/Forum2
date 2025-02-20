@@ -1,12 +1,21 @@
 import { useNavigate } from 'react-router-dom';
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useMemo } from 'react';
 import { ref, onValue, get, update } from 'firebase/database';
-import { Box, Text, Button, Stack, Heading, Flex } from '@chakra-ui/react';
+import {
+  Box,
+  Text,
+  Button,
+  Stack,
+  Heading,
+  Flex,
+  Checkbox,
+} from '@chakra-ui/react';
 import { AppContext } from '../store/app.context';
 import { db } from '../../config/firebase-config';
 
 const Dashboard = () => {
   const [posts, setPosts] = useState([]);
+  const [sortByLikes, setSortByLikes] = useState(false);
   const { user } = useContext(AppContext);
   const navigate = useNavigate();
 
@@ -15,7 +24,6 @@ const Dashboard = () => {
     const postsRef = ref(db, 'posts');
     onValue(postsRef, (snapshot) => {
       const postsData = snapshot.val();
-      console.log('Fetched posts data:', postsData); // Debugging log
       if (postsData) {
         const postList = Object.entries(postsData).map(([id, post]) => ({
           id,
@@ -65,10 +73,32 @@ const Dashboard = () => {
     return new Date(dateString).toISOString().split('T')[0];
   };
 
+  const sortedPosts = useMemo(() => {
+    if (sortByLikes) {
+      return [...posts].sort((a, b) => getLikesCount(b) - getLikesCount(a));
+    }
+    return posts;
+  }, [posts, sortByLikes]);
+
   return (
-    <Box p={5} w="100%" display="flex" justifyContent="center" minHeight="100vh">
+    <Box
+      p={5}
+      w="100%"
+      display="flex"
+      justifyContent="center"
+      minHeight="100vh"
+    >
       <Stack spacing={8} w="80%" mt={4}>
-        {posts.map((post) => (
+        <Box mb={4}>
+          <Checkbox
+            isChecked={sortByLikes}
+            onChange={(e) => setSortByLikes(e.target.checked)}
+            colorScheme="teal"
+          >
+            <Text color="white">Sort by most liked</Text>
+          </Checkbox>
+        </Box>
+        {sortedPosts.map((post) => (
           <Box
             key={post.id}
             p={6}
@@ -114,7 +144,8 @@ const Dashboard = () => {
               </Flex>
             </Flex>
             <Text mt={4} fontSize="md" color="gray.400">
-              Likes: {getLikesCount(post)} | Posted on {formatDate(post.createdOn)}
+              Likes: {getLikesCount(post)} | Posted on{' '}
+              {formatDate(post.createdOn)}
             </Text>
           </Box>
         ))}

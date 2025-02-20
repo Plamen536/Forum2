@@ -1,12 +1,12 @@
-import "./PostView.css";
-import { useState, useEffect, useContext } from "react";
-import { AppContext } from "../store/app.context";
-import PostHeader from "./PostHeader/PostHeader";
-import PostContent from "./PostContent/PostContent";
-import PostActions from "./PostActions/PostActions";
-import { useParams } from "react-router-dom";
-import { onValue, ref } from "firebase/database";
-import { db } from "../../config/firebase-config";
+import './PostView.css';
+import { useState, useEffect, useContext } from 'react';
+import { AppContext } from '../store/app.context';
+import PostHeader from './PostHeader/PostHeader';
+import PostContent from './PostContent/PostContent';
+import PostActions from './PostActions/PostActions';
+import { useParams } from 'react-router-dom';
+import { onValue, ref } from 'firebase/database';
+import { db } from '../../config/firebase-config';
 import {
   Box,
   Spinner,
@@ -17,7 +17,7 @@ import {
   Center,
   useBreakpointValue,
   useColorModeValue,
-} from "@chakra-ui/react";
+} from '@chakra-ui/react';
 
 /**
  * @module PostView
@@ -34,7 +34,6 @@ import {
  */
 
 const PostView = () => {
-  const { id } = useParams();
   const { user } = useContext(AppContext);
 
   const [viewComments, setViewComments] = useState(false);
@@ -42,6 +41,13 @@ const PostView = () => {
   const [reply, setReply] = useState([]);
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(true);
+  const { id } = useParams();
+
+  // Dark mode background color for components
+  const bgColor = useColorModeValue('gray.800', 'gray.900');
+  const boxBgColor = useColorModeValue('gray.700', 'gray.800');
+  const textColor = useColorModeValue('white', 'gray.200');
+  const borderColor = useColorModeValue('gray.600', 'gray.700');
 
   // Fetch post data from Firebase
   useEffect(() => {
@@ -86,12 +92,6 @@ const PostView = () => {
       </Center>
     );
   }
-
-  // Dark mode background color for components
-  const bgColor = useColorModeValue("gray.800", "gray.900");
-  const boxBgColor = useColorModeValue("gray.700", "gray.800");
-  const textColor = useColorModeValue("white", "gray.200");
-  const borderColor = useColorModeValue("gray.600", "gray.700");
 
   return (
     <Container maxW="3xl" p={6} bg={bgColor} color={textColor}>
@@ -144,7 +144,7 @@ const PostView = () => {
         </Box>
 
         {/* Responsive button for mobile */}
-        <Box w="full" display={{ base: "block", md: "none" }}>
+        <Box w="full" display={{ base: 'block', md: 'none' }}>
           <Button
             onClick={toggleViewComments}
             colorScheme="teal"
@@ -152,7 +152,7 @@ const PostView = () => {
             variant="outline"
             mb={4}
           >
-            {viewComments ? "Hide Comments" : "Show Comments"}
+            {viewComments ? 'Hide Comments' : 'Show Comments'}
           </Button>
         </Box>
       </VStack>

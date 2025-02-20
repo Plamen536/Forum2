@@ -152,7 +152,7 @@ const Comments = () => {
               borderRadius="md"
               bg="gray.700"
               mb={4}
-              width="75%"
+              width="100%"
               justifyContent="center"
               
             >
