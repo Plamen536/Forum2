@@ -75,7 +75,8 @@ const Dashboard = () => {
 
   // Format the date to a readable format
   const formatDate = (dateString) => {
-    return new Date(dateString).toISOString().split('T')[0];
+    const date = new Date(dateString);
+    return isNaN(date) ? "Invalid date" : date.toISOString().split('T')[0];
   };
 
   const sortedPosts = useMemo(() => {

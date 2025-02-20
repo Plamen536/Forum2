@@ -3,6 +3,8 @@ import {useNavigate } from 'react-router-dom';
 const SearchResults = ({ results }) => {
     const navigate = useNavigate();
 
+    console.log("Rendering SearchResults with:", results);
+
     if (!Array.isArray(results)) {
         return <div className="search-results"></div>;
       }
