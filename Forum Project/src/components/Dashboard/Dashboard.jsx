@@ -113,7 +113,7 @@ const Dashboard = () => {
             onChange={(e) => setSortByComments(e.target.checked)}
             colorScheme="teal"
           >
-            <Text color="white">Sort by most liked</Text>
+            <Text color="white">Sort by Most Commented</Text>
           </Checkbox>
         </Box>
 
