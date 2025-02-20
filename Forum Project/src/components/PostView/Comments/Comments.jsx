@@ -168,7 +168,7 @@ const Comments = () => {
                   {comment.author}
                 </Text>
                 <Text ml={2} fontSize="sm" color="gray.500">
-                  Upvotes: {getLikesCount(comment)}
+                  Likes: {getLikesCount(comment)}
                 </Text>
               </Box>
               <Box mb={2}>
