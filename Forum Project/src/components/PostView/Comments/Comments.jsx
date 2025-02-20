@@ -1,11 +1,11 @@
-import { Suspense, useContext, useEffect, useMemo, useState } from "react";
-import Loading from "../Loading/Loading";
-import { AppContext } from "../../store/app.context";
-import { get, onValue, ref, update } from "firebase/database";
-import { db } from "../../../config/firebase-config";
-import { useParams } from "react-router-dom";
-import "./Comments.css";
-import { getUserData } from "@/services/users.service";
+import { Suspense, useContext, useEffect, useMemo, useState } from 'react';
+import Loading from '../Loading/Loading';
+import { AppContext } from '../../store/app.context';
+import { get, onValue, ref, update } from 'firebase/database';
+import { db } from '../../../config/firebase-config';
+import { useParams } from 'react-router-dom';
+import './Comments.css';
+import { getUserData } from '@/services/users.service';
 import {
   Box,
   Button,
@@ -13,7 +13,7 @@ import {
   Checkbox,
   Text,
   VStack,
-} from "@chakra-ui/react";
+} from '@chakra-ui/react';
 
 /**
  * @module Comments
@@ -38,7 +38,7 @@ const Comments = () => {
   const [comments, setComments] = useState([]);
   const [sortByLikes, setSortByLikes] = useState(false);
   const [editingCommentId, setEditingCommentId] = useState(null);
-  const [editText, setEditText] = useState("");
+  const [editText, setEditText] = useState('');
   const [userHandle, setUserHandle] = useState();
 
   useEffect(() => {
@@ -65,7 +65,7 @@ const Comments = () => {
       getUserData(user.uid)
         .then((data) => data[Object.keys(data)])
         .then((data) => setUserHandle(data.handle))
-        .catch((error) => console.error("Error fetching user data:", error));
+        .catch((error) => console.error('Error fetching user data:', error));
     }
   }, [user?.uid]);
 
@@ -81,10 +81,10 @@ const Comments = () => {
     try {
       await update(ref(db), updates);
       setEditingCommentId(null);
-      setEditText("");
+      setEditText('');
     } catch (error) {
-      console.error("Error updating comment:", error);
-      alert("Failed to update comment");
+      console.error('Error updating comment:', error);
+      alert('Failed to update comment');
     }
   };
 
@@ -107,8 +107,8 @@ const Comments = () => {
 
       await update(ref(db), updates);
     } catch (error) {
-      console.error("Error updating like:", error);
-      alert("Failed to update like");
+      console.error('Error updating like:', error);
+      alert('Failed to update like');
     }
   };
 
@@ -118,6 +118,21 @@ const Comments = () => {
 
   const getLikesCount = (comment) => {
     return comment.likes ? Object.keys(comment.likes).length : 0;
+  };
+
+  const handleDeleteComment = async (commentId) => {
+    if (!window.confirm('Are you sure you want to delete this comment?')) {
+      return;
+    }
+
+    try {
+      const updates = {};
+      updates[`posts/${id}/comments/${commentId}`] = null;
+      await update(ref(db), updates);
+    } catch (error) {
+      console.error('Error deleting comment:', error);
+      alert('Failed to delete comment');
+    }
   };
 
   const sortedComments = useMemo(() => {
@@ -144,7 +159,6 @@ const Comments = () => {
           </Box>
           <hr />
           {sortedComments.map((comment) => (
-            
             <Box
               key={comment.id}
               p={4}
@@ -152,9 +166,8 @@ const Comments = () => {
               borderRadius="md"
               bg="gray.700"
               mb={4}
-              width="75%"
+              width="100%"
               justifyContent="center"
-              
             >
               <Box display="flex" alignItems="center" mb={2}>
                 <img
@@ -168,7 +181,7 @@ const Comments = () => {
                   {comment.author}
                 </Text>
                 <Text ml={2} fontSize="sm" color="gray.500">
-                  Upvotes: {getLikesCount(comment)}
+                  Likes: {getLikesCount(comment)}
                 </Text>
               </Box>
               <Box mb={2}>
@@ -181,17 +194,28 @@ const Comments = () => {
                       variant="outline"
                       mr={2}
                     >
-                      {isLikedByUser(comment) ? "Unlike" : "Like"}
+                      {isLikedByUser(comment) ? 'Unlike' : 'Like'}
                     </Button>
                     {user && userHandle === comment.author && (
-                      <Button
-                        onClick={() => handleEditClick(comment)}
-                        colorScheme="blue"
-                        size="sm"
-                        variant="outline"
-                      >
-                        Edit
-                      </Button>
+                      <>
+                        <Button
+                          onClick={() => handleEditClick(comment)}
+                          colorScheme="blue"
+                          size="sm"
+                          variant="outline"
+                          mr={2}
+                        >
+                          Edit
+                        </Button>
+                        <Button
+                          onClick={() => handleDeleteComment(comment.id)}
+                          colorScheme="red"
+                          size="sm"
+                          variant="outline"
+                        >
+                          Delete
+                        </Button>
+                      </>
                     )}
                   </Box>
                 )}
@@ -204,8 +228,8 @@ const Comments = () => {
                       bg="gray.600"
                       color="white"
                       borderColor="gray.500"
-                      _hover={{ borderColor: "gray.400" }}
-                      _focus={{ borderColor: "teal.400" }}
+                      _hover={{ borderColor: 'gray.400' }}
+                      _focus={{ borderColor: 'teal.400' }}
                     />
                     <Button
                       onClick={() => handleSaveEdit(comment.id)}

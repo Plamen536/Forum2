@@ -1,12 +1,22 @@
 import { useNavigate } from 'react-router-dom';
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useMemo } from 'react';
 import { ref, onValue, get, update } from 'firebase/database';
-import { Box, Text, Button, Stack, Heading, Flex } from '@chakra-ui/react';
+import {
+  Box,
+  Text,
+  Button,
+  Stack,
+  Heading,
+  Flex,
+  Checkbox,
+} from '@chakra-ui/react';
 import { AppContext } from '../store/app.context';
 import { db } from '../../config/firebase-config';
 
 const Dashboard = () => {
   const [posts, setPosts] = useState([]);
+  const [sortByLikes, setSortByLikes] = useState(false);
+  const [sortByComments, setSortByComments] = useState(false);
   const { user } = useContext(AppContext);
   const navigate = useNavigate();
 
@@ -59,15 +69,55 @@ const Dashboard = () => {
     return post.likes ? Object.keys(post.likes).length : 0;
   };
 
+  const getCommentsCount = (post) => {
+    return post.comments ? Object.keys(post.comments).length : 0;
+  };
+
   // Format the date to a readable format
   const formatDate = (dateString) => {
     return new Date(dateString).toISOString().split('T')[0];
   };
 
+  const sortedPosts = useMemo(() => {
+    if (sortByLikes) {
+      return [...posts].sort((a, b) => getLikesCount(b) - getLikesCount(a));
+    }
+    if (sortByComments) {
+      return [...posts].sort(
+        (a, b) => getCommentsCount(b) - getCommentsCount(a)
+      );
+    }
+    return posts;
+  }, [posts, sortByLikes, sortByComments]);
+
   return (
-    <Box p={5} w="100%" display="flex" justifyContent="center" minHeight="100vh">
+    <Box
+      p={5}
+      w="100%"
+      display="flex"
+      justifyContent="center"
+      minHeight="100vh"
+    >
       <Stack spacing={8} w="80%" mt={4}>
-        {posts.map((post) => (
+        <Box mb={4}>
+          <Checkbox
+            isChecked={sortByLikes}
+            onChange={(e) => setSortByLikes(e.target.checked)}
+            colorScheme="teal"
+          >
+            <Text color="white">Sort by most liked</Text>
+          </Checkbox>
+          <Checkbox
+            marginLeft={4}
+            isChecked={sortByComments}
+            onChange={(e) => setSortByComments(e.target.checked)}
+            colorScheme="teal"
+          >
+            <Text color="white">Sort by Most Commented</Text>
+          </Checkbox>
+        </Box>
+
+        {sortedPosts.map((post) => (
           <Box
             key={post.id}
             p={6}
@@ -113,7 +163,8 @@ const Dashboard = () => {
               </Flex>
             </Flex>
             <Text mt={4} fontSize="md" color="gray.400">
-              Likes: {getLikesCount(post)} | Posted on {formatDate(post.createdOn)}
+              Likes: {getLikesCount(post)} | Comments: {getCommentsCount(post)} | Posted on{' '}
+              {formatDate(post.createdOn)}
             </Text>
           </Box>
         ))}

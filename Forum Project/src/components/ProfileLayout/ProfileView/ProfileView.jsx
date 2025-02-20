@@ -143,7 +143,7 @@ const ProfileView = () => {
               <Button type="submit" colorScheme="teal">
                 Save Changes
               </Button>
-              <Button onClick={() => setIsEditing(false)} variant="outline">
+              <Button onClick={() => setIsEditing(false)} colorScheme='teal' variant="outline">
                 Cancel
               </Button>
             </Stack>
@@ -169,7 +169,7 @@ const ProfileView = () => {
               <Heading as="h3" size="md" mb={2}>
                 {post.title}
               </Heading>
-              <Text noOfLines={2} mb={3} color="gray.600">
+              <Text noOfLines={2} mb={3} color="gray.300">
                 {post.content.length > 100
                   ? `${post.content.substring(0, 100)}...`
                   : post.content}
