@@ -16,6 +16,7 @@ import { db } from '../../config/firebase-config';
 const Dashboard = () => {
   const [posts, setPosts] = useState([]);
   const [sortByLikes, setSortByLikes] = useState(false);
+  const [sortByComments, setSortByComments] = useState(false);
   const { user } = useContext(AppContext);
   const navigate = useNavigate();
 
@@ -68,6 +69,10 @@ const Dashboard = () => {
     return post.likes ? Object.keys(post.likes).length : 0;
   };
 
+  const getCommentsCount = (post) => {
+    return post.comments ? Object.keys(post.comments).length : 0;
+  };
+
   // Format the date to a readable format
   const formatDate = (dateString) => {
     return new Date(dateString).toISOString().split('T')[0];
@@ -77,8 +82,13 @@ const Dashboard = () => {
     if (sortByLikes) {
       return [...posts].sort((a, b) => getLikesCount(b) - getLikesCount(a));
     }
+    if (sortByComments) {
+      return [...posts].sort(
+        (a, b) => getCommentsCount(b) - getCommentsCount(a)
+      );
+    }
     return posts;
-  }, [posts, sortByLikes]);
+  }, [posts, sortByLikes, sortByComments]);
 
   return (
     <Box
@@ -97,7 +107,16 @@ const Dashboard = () => {
           >
             <Text color="white">Sort by most liked</Text>
           </Checkbox>
+          <Checkbox
+            marginLeft={4}
+            isChecked={sortByComments}
+            onChange={(e) => setSortByComments(e.target.checked)}
+            colorScheme="teal"
+          >
+            <Text color="white">Sort by most liked</Text>
+          </Checkbox>
         </Box>
+
         {sortedPosts.map((post) => (
           <Box
             key={post.id}
