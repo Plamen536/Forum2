@@ -93,7 +93,7 @@ const Home = () => {
         </Box>
 
         <Box flex={1}>
-          <Heading size="lg" mb={5} color="teal.400">Most Discussed</Heading>
+          <Heading size="lg" mb={5} color="teal.400">Most Recent & Discussed</Heading>
           {topCommented.map((post) => (
             <Box 
               key={post.id}

@@ -163,7 +163,7 @@ const Dashboard = () => {
               </Flex>
             </Flex>
             <Text mt={4} fontSize="md" color="gray.400">
-              Likes: {getLikesCount(post)} | Posted on{' '}
+              Likes: {getLikesCount(post)} | Comments: {getCommentsCount(post)} | Posted on{' '}
               {formatDate(post.createdOn)}
             </Text>
           </Box>
