@@ -16,6 +16,7 @@ import ProfileView from './components/ProfileLayout/ProfileView/ProfileView';
 import MainLayout from './components/MainLayout/MainLayout';
 import './App.css';
 import Admin from './components/Admin/Admin';
+import SearchResults from './components/Search/SearchResults';
 
 function App() {
   const [appState, setAppState] = useState({
@@ -66,6 +67,7 @@ function App() {
               <Route path="/register" element={<Register />} />
               <Route path="/upload" element={<UploadView />} />
               <Route path="/users" element={<Admin />} />
+              <Route path="/search" element={<SearchResults />} />
 
             </Route>
             {/* Profile section with its own layout */}
