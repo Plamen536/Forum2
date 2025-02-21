@@ -178,13 +178,27 @@ const UploadView = () => {
           {selectedTag === 'general' && (
             <GeneralTagsView tags={addedTags} setTags={setAddedTags} />
           )}
-          {selectedTag === 'technical' && <TechnicalTagsView />}
-          {selectedTag === 'fuel' && <FuelTagsView />}
-          {selectedTag === 'brand' && <BrandTagsView />}
-          {selectedTag === 'racing' && <RacingTagsView />}
-          {selectedTag === 'law' && <LawTagsView />}
-          {selectedTag === 'aesthetic' && <AestheticTagsView />}
-          {selectedTag === 'region' && <RegionTagsView />}
+          {selectedTag === 'technical' && (
+            <TechnicalTagsView tags={addedTags} setTags={setAddedTags} />
+          )}
+          {selectedTag === 'fuel' && (
+            <FuelTagsView tags={addedTags} setTags={setAddedTags} />
+          )}
+          {selectedTag === 'brand' && (
+            <BrandTagsView tags={addedTags} setTags={setAddedTags} />
+          )}
+          {selectedTag === 'racing' && (
+            <RacingTagsView tags={addedTags} setTags={setAddedTags} />
+          )}
+          {selectedTag === 'law' && (
+            <LawTagsView tags={addedTags} setTags={setAddedTags} />
+          )}
+          {selectedTag === 'aesthetic' && (
+            <AestheticTagsView tags={addedTags} setTags={setAddedTags} />
+          )}
+          {selectedTag === 'region' && (
+            <RegionTagsView tags={addedTags} setTags={setAddedTags} />
+          )}
 
           {/* Button to reset selection */}
           {selectedTag && (
