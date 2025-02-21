@@ -79,16 +79,22 @@ const Dashboard = () => {
     return isNaN(date) ? 'Invalid date' : date.toISOString().split('T')[0];
   };
 
+  const sortByCreatedOn = (post) => {};
+
   const sortedPosts = useMemo(() => {
+    let sorted = [...posts].sort(
+      (a, b) => new Date(b.createdOn) - new Date(a.createdOn)
+    ); // Default sorting: newest first
+
     if (sortByLikes) {
-      return [...posts].sort((a, b) => getLikesCount(b) - getLikesCount(a));
+      sorted = [...posts].sort((a, b) => getLikesCount(b) - getLikesCount(a));
     }
     if (sortByComments) {
-      return [...posts].sort(
+      sorted = [...posts].sort(
         (a, b) => getCommentsCount(b) - getCommentsCount(a)
       );
     }
-    return posts;
+    return sorted;
   }, [posts, sortByLikes, sortByComments]);
 
   return (
