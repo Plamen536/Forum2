@@ -76,7 +76,7 @@ const Dashboard = () => {
   // Format the date to a readable format
   const formatDate = (dateString) => {
     const date = new Date(dateString);
-    return isNaN(date) ? "Invalid date" : date.toISOString().split('T')[0];
+    return isNaN(date) ? 'Invalid date' : date.toISOString().split('T')[0];
   };
 
   const sortedPosts = useMemo(() => {
@@ -164,8 +164,11 @@ const Dashboard = () => {
               </Flex>
             </Flex>
             <Text mt={4} fontSize="md" color="gray.400">
-              Likes: {getLikesCount(post)} | Comments: {getCommentsCount(post)} | Posted on{' '}
-              {formatDate(post.createdOn)}
+              Likes: {getLikesCount(post)} | Comments: {getCommentsCount(post)}{' '}
+              | Posted on {formatDate(post.createdOn)}
+            </Text>
+            <Text mt={2} fontSize="md" color="teal.300">
+              Tags: {post.tags ? Object.keys(post.tags).join(' | ') : 'No Tags'}
             </Text>
           </Box>
         ))}
