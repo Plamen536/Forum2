@@ -1,3 +1,4 @@
+import PostsAndUsers from '@/Posts&Users/Posts&Users';
 import './Footer.css';
 import {
   Box,
@@ -62,11 +63,12 @@ const Footer = () => {
           </Stack>
 
           <Divider borderColor="gray.600" />
-
+          <PostsAndUsers />
           {/* Copyright */}
           <Text textAlign="center" fontSize="sm">
             &copy; {new Date().getFullYear()} Forum. All rights reserved.
           </Text>
+          
         </Stack>
       </Container>
     </Box>
