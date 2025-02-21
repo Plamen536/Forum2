@@ -76,19 +76,25 @@ const Dashboard = () => {
   // Format the date to a readable format
   const formatDate = (dateString) => {
     const date = new Date(dateString);
-    return isNaN(date) ? "Invalid date" : date.toISOString().split('T')[0];
+    return isNaN(date) ? 'Invalid date' : date.toISOString().split('T')[0];
   };
 
   const sortedPosts = useMemo(() => {
-    if (sortByLikes) {
-      return [...posts].sort((a, b) => getLikesCount(b) - getLikesCount(a));
-    }
-    if (sortByComments) {
-      return [...posts].sort(
-        (a, b) => getCommentsCount(b) - getCommentsCount(a)
-      );
-    }
-    return posts;
+    let sorted = [...posts];
+
+    sorted.sort((a, b) => {
+      if (sortByLikes && sortByComments) {
+        return (
+          getLikesCount(b) - getLikesCount(a) ||
+          getCommentsCount(b) - getCommentsCount(a)
+        );
+      }
+      if (sortByLikes) return getLikesCount(b) - getLikesCount(a);
+      if (sortByComments) return getCommentsCount(b) - getCommentsCount(a);
+      return new Date(b.createdOn) - new Date(a.createdOn); // Default sorting
+    });
+
+    return sorted;
   }, [posts, sortByLikes, sortByComments]);
 
   return (
@@ -164,8 +170,11 @@ const Dashboard = () => {
               </Flex>
             </Flex>
             <Text mt={4} fontSize="md" color="gray.400">
-              Likes: {getLikesCount(post)} | Comments: {getCommentsCount(post)} | Posted on{' '}
-              {formatDate(post.createdOn)}
+              Likes: {getLikesCount(post)} | Comments: {getCommentsCount(post)}{' '}
+              | Posted on {formatDate(post.createdOn)}
+            </Text>
+            <Text mt={2} fontSize="md" color="teal.300">
+              Tags: {post.tags ? Object.keys(post.tags).join(' | ') : 'No Tags'}
             </Text>
           </Box>
         ))}
