@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { getDatabase, ref, onValue } from "firebase/database";
 import "./Posts&Users.css";
+import { FaUsers } from "react-icons/fa";
+import { FaComments } from "react-icons/fa";
+import { Flex, Text } from '@chakra-ui/react';
+
+
 
 export default function PostsAndUsers() {
   const [posts, setPosts] = useState([]);
@@ -41,24 +46,15 @@ export default function PostsAndUsers() {
   }, []);
 
   return (
-    <div>
-      <h1
-        style={{
-            position: "fixed",    // Stays fixed at the bottom right
-            bottom: "20px",       // 20px from the bottom
-            right: "20px",        // 20px from the right
-            backgroundColor: "#2c3e50",
-            color: "white",
-            padding: "10px 20px",
-            borderRadius: "8px",
-            fontSize: "20px",
-            fontWeight: "bold",
-            boxShadow: "2px 2px 10px rgba(0, 0, 0, 0.3)",
-            display: "inline-block"
-        }}
-      >
-        📢 Posts: {posts.length} | 👥 Users: {users.length}
-      </h1>
-    </div>
+    <Flex justify="center" align="center" gap={4}>
+      <Text display="flex" alignItems="center">
+        <FaComments style={{ marginRight: '8px' }} />
+        {posts.length}
+      </Text>
+      <Text display="flex" alignItems="center">
+        <FaUsers style={{ marginRight: '8px' }} />
+        {users.length}
+      </Text>
+    </Flex>
   );
 }

@@ -1,20 +1,21 @@
-import { useContext, useEffect, useState } from 'react';
-import { Box, Button, Heading, Input, Stack, Text } from '@chakra-ui/react';
-import Avatar from '../../Header/Avatar/Avatar';
-import { AppContext } from '../../store/app.context';
-import { getUserData } from '../../../services/users.service';
-import { useNavigate } from 'react-router-dom';
-import { onValue, ref, update } from 'firebase/database';
-import { db } from '../../../config/firebase-config';
+import { useContext, useEffect, useState } from "react";
+import { Box, Button, Heading, Input, Stack, Text } from "@chakra-ui/react";
+import Avatar from "../../Header/Avatar/Avatar";
+import { AppContext } from "../../store/app.context";
+import { getUserData } from "../../../services/users.service";
+import { useNavigate } from "react-router-dom";
+import { onValue, ref, update } from "firebase/database";
+import { db } from "../../../config/firebase-config";
+import { TbArrowBackUp } from "react-icons/tb";
 
 const ProfileView = () => {
   const { user } = useContext(AppContext);
   const [userPosts, setUserPosts] = useState([]);
-  const [data, setData] = useState('');
+  const [data, setData] = useState("");
   const [isEditing, setIsEditing] = useState(false);
   const [editForm, setEditForm] = useState({
-    firstName: '',
-    lastName: '',
+    firstName: "",
+    lastName: "",
   });
   const navigate = useNavigate();
 
@@ -62,7 +63,7 @@ const ProfileView = () => {
       editForm.lastName.length < 4 ||
       editForm.lastName.length > 32
     ) {
-      alert('First and last name must be between 4 and 32 characters');
+      alert("First and last name must be between 4 and 32 characters");
       return;
     }
 
@@ -78,17 +79,24 @@ const ProfileView = () => {
         lastName: editForm.lastName,
       }));
       setIsEditing(false);
-      alert('Profile updated successfully!');
+      alert("Profile updated successfully!");
     } catch (error) {
-      console.error('Error updating profile:', error);
-      alert('Failed to update profile');
+      console.error("Error updating profile:", error);
+      alert("Failed to update profile");
     }
   };
 
   return (
     <Box maxW="container.sm" mx="auto" py={6}>
       <Heading as="h1" size="xl" mb={6}>
-        <Button onClick={() => navigate(-1)}>Back</Button> Profile
+        <Button
+          onClick={() => navigate(-1)}
+          leftIcon={<TbArrowBackUp />}
+          colorScheme="teal"
+        >
+          Back
+        </Button>{" "}
+        Profile
       </Heading>
 
       <Box mb={6}>
@@ -143,7 +151,11 @@ const ProfileView = () => {
               <Button type="submit" colorScheme="teal">
                 Save Changes
               </Button>
-              <Button onClick={() => setIsEditing(false)} colorScheme='teal' variant="outline">
+              <Button
+                onClick={() => setIsEditing(false)}
+                colorScheme="teal"
+                variant="outline"
+              >
                 Cancel
               </Button>
             </Stack>
@@ -164,7 +176,7 @@ const ProfileView = () => {
               shadow="md"
               borderWidth="1px"
               borderRadius="md"
-              _hover={{ shadow: 'lg' }}
+              _hover={{ shadow: "lg" }}
             >
               <Heading as="h3" size="md" mb={2}>
                 {post.title}

@@ -10,7 +10,6 @@ import {
 } from '@chakra-ui/react';
 import { ref, query, orderByChild, limitToLast, get } from 'firebase/database';
 import { db } from '../../config/firebase-config';
-import PostsAndUsers from '../../Posts&Users/Posts&Users';
 import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
@@ -78,8 +77,6 @@ const Home = () => {
         </SimpleGrid>
       </Box>
 
-      {/* Statistics Component */}
-      <PostsAndUsers />
 
       {/* Recent & Most Commented Posts */}
       <Flex direction={{ base: 'column', lg: 'row' }} gap={8} mt={10}>

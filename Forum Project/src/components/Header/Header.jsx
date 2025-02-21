@@ -2,7 +2,7 @@ import { useState, useContext } from 'react';
 import { NavLink } from 'react-router-dom';
 import { AppContext } from '../store/app.context';
 import { Box, Button, Container, Flex, Heading, Stack } from '@chakra-ui/react';
-import DropdownMenu from './DropdownMenu/DropdownMenu';
+import Profile from './ProfileMenu/Profile';
 import Search from '../Search/Search';
 import './Header.css';
 
@@ -55,7 +55,7 @@ export default function Header() {
                     </Button>
                   </NavLink>
                 )}
-                <DropdownMenu />
+                <Profile />
               </>
             )}
           </Stack>
