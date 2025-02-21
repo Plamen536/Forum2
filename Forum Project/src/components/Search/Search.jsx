@@ -1,64 +1,34 @@
-import { useState } from "react";
-import { getDatabase, ref, query, orderByChild, startAt, endAt, get } from "firebase/database";
-import SearchBar from './SearchBar';
-import SearchResults from './SearchResults';
-import './SearchBar.css';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Input, Button, Box } from '@chakra-ui/react';
 
-const Search = () => { 
-    const [searchResults, setSearchResults] = useState([]);
+const Search = () => {
+  const [query, setQuery] = useState('');
+  const navigate = useNavigate();
 
-    const handleSearch = async (searchQuery) => {
-        const db = getDatabase();
-        const articlesRef = ref(db, "articles");
+  const handleSearch = () => {
+    if (query.trim()) {
+      navigate(`/search?query=${query}`);
+    }
+  };
 
-        // Query by title
-        const titleQuery = query(
-            articlesRef,
-            orderByChild("title"),
-            startAt(searchQuery),
-            endAt(searchQuery + "\uf8ff")
-        );
-
-        // Query by content
-        const contentQuery = query(
-            articlesRef,
-            orderByChild("content"),
-            startAt(searchQuery),
-            endAt(searchQuery + "\uf8ff")
-        );
-
-        // Query by authorName
-        const authorQuery = query(
-            articlesRef,
-            orderByChild("authorName"),
-            startAt(searchQuery),
-            endAt(searchQuery + "\uf8ff")
-        );
-
-        const titleSnapshot = await get(titleQuery);
-        const contentSnapshot = await get(contentQuery);
-        const authorSnapshot = await get(authorQuery);
-
-        const results = new Set();
-        titleSnapshot.forEach(childSnapshot => {
-            results.add({ id: childSnapshot.key, ...childSnapshot.val() });
-        });
-        contentSnapshot.forEach(childSnapshot => {
-            results.add({ id: childSnapshot.key, ...childSnapshot.val() });
-        });
-        authorSnapshot.forEach(childSnapshot => {
-            results.add({ id: childSnapshot.key, ...childSnapshot.val() });
-        });
-
-        setSearchResults(Array.from(results));
-    };
-
-    return (
-        <div>
-            <SearchBar onSearch={handleSearch} />
-            <SearchResults results={searchResults.slice(0, 3)} /> {/* Limit to 3 results */}
-        </div>
-    );
+  return (
+    <Box display="flex" alignItems="center">
+      <Input
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+        placeholder="Search..."
+        bg="white"
+        color="black"
+        borderColor="gray.300"
+        _hover={{ borderColor: 'gray.400' }}
+        _focus={{ borderColor: 'teal.400' }}
+      />
+      <Button onClick={handleSearch} colorScheme="teal" ml={2}>
+        Search
+      </Button>
+    </Box>
+  );
 };
 
 export default Search;
