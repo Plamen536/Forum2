@@ -75,6 +75,7 @@ npm run dev
       "author": "string", // userHandle
       "createdOn": "timestamp",
       "uid": "string",
+      "tags": boolean,
       "likes": {
         "{userId}": boolean
       },
