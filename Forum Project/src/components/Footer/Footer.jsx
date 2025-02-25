@@ -5,15 +5,21 @@ import {
   Container,
   Stack,
   Text,
-  Link,
   IconButton,
   Divider,
 } from '@chakra-ui/react';
 import { SiGithub } from 'react-icons/si';
+import { Link } from 'react-router-dom';
+import { useContext } from 'react';
+import { AppContext } from '../store/app.context';
 
-const socialLinks = [{ href: 'https://github.com/Plamen536/Forum2', icon: <SiGithub /> }];
+const socialLinks = [
+  { href: 'https://github.com/Plamen536/Forum2', icon: <SiGithub /> },
+];
 
 const Footer = () => {
+  const { user } = useContext(AppContext);
+
   return (
     <Box bg="gray.900" color="gray.300" py={8}>
       <Container maxW="container.lg">
@@ -25,21 +31,35 @@ const Footer = () => {
             justify="center"
             align="center"
           >
-            <Link href="/" _hover={{ color: 'white' }}>
+            <Link to="/" _hover={{ color: 'white' }}>
               Home
             </Link>
 
-            <Link href="/dashboard" _hover={{ color: 'white' }}>
-              About
+            <Link to="/dashboard" _hover={{ color: 'white' }}>
+              Dashboard
             </Link>
 
-            <Link href="#" _hover={{ color: 'white' }}>
-              Services
-            </Link>
+            {user ? (
+              <>
+                <Link to="/upload" _hover={{ color: 'white' }}>
+                  Upload
+                </Link>
 
-            <Link href="#" _hover={{ color: 'white' }}>
-              Contact
-            </Link>
+                <Link to="/your-profile" _hover={{ color: 'white' }}>
+                  Your profile
+                </Link>
+              </>
+            ) : (
+              <>
+                <Link to="/login" _hover={{ color: 'white' }}>
+                  Login
+                </Link>
+
+                <Link to="/register" _hover={{ color: 'white' }}>
+                  Register
+                </Link>
+              </>
+            )}
           </Stack>
 
           {/* Social Media Icons */}
@@ -68,7 +88,6 @@ const Footer = () => {
           <Text textAlign="center" fontSize="sm">
             &copy; {new Date().getFullYear()} Forum. All rights reserved.
           </Text>
-          
         </Stack>
       </Container>
     </Box>
