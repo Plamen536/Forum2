@@ -207,7 +207,7 @@ const UploadView = () => {
               size="sm"
               onClick={() => setSelectedTag(null)}
             >
-              Reset Selection
+              Go Back
             </Button>
           )}
 

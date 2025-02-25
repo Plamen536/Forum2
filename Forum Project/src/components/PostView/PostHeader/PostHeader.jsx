@@ -18,7 +18,6 @@ const PostHeader = ({ user, title, content, isAdmin }) => {
   const [userHandle, setUserHandle] = useState();
   const { id } = useParams();
   const { userData } = useContext(AppContext);
-console.log(userData?.role)
 
   useEffect(() => {
     if (id) {
