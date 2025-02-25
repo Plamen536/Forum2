@@ -20,12 +20,12 @@ const Search = () => {
   };
 
   return (
-    <Box display="flex" alignItems="center" bg="gray.50" p={2} borderRadius="md" boxShadow="sm">
+    <Box display="flex" alignItems="center" bg="gray.50" p={2} borderRadius="md" boxShadow="sm" w={{ base: '100%', md: 'auto' }}>
       <Input
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         onKeyPress={handleKeyPress}
-        w="450px"
+        w={{ base: '100%', md: '450px' }}
         placeholder="Search..."
         bg="white"
         color="black"
@@ -33,7 +33,7 @@ const Search = () => {
         _hover={{ borderColor: 'gray.400' }}
         _focus={{ borderColor: 'teal.400', boxShadow: '0 0 0 2px teal.200' }}
       />
-      <Button onClick={handleSearch} colorScheme="teal" ml={2} leftIcon={<FaSearch />}>
+      <Button onClick={handleSearch} colorScheme="teal" ml={2} leftIcon={<FaSearch />} w={{ base: '100%', md: 'auto' }}>
         Search
       </Button>
     </Box>
