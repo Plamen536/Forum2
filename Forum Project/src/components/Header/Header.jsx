@@ -5,9 +5,10 @@ import { Box, Button, Container, Flex, Heading, Stack } from '@chakra-ui/react';
 import Profile from './ProfileMenu/Profile';
 import Search from '../Search/Search';
 import './Header.css';
+// import CarNews from '../CarNews/CarNews';
 
 export default function Header() {
-  const [menuView, setMenuView] = useState(false);
+  // const [menuView, setMenuView] = useState(false);
   const { user, userData } = useContext(AppContext);
 
   return (
@@ -42,11 +43,13 @@ export default function Header() {
             )}
             {user && (
               <>
-                <NavLink to="/upload">
-                  <Button variant="link" color="white">
-                    Upload
-                  </Button>
-                </NavLink>
+                {userData?.role !== 'blocked' && (
+                  <NavLink to="/upload">
+                    <Button variant="link" color="white">
+                      Upload
+                    </Button>
+                  </NavLink>
+                )}
                 {/* Conditionally render "Users" link for admin */}
                 {userData?.role === 'admin' && (
                   <NavLink to="/users">
@@ -55,6 +58,11 @@ export default function Header() {
                     </Button>
                   </NavLink>
                 )}
+                <NavLink to="/car-news">
+                  <Button variant="link" color="white">
+                    Random Car News
+                  </Button>
+                </NavLink>
                 <Profile />
               </>
             )}

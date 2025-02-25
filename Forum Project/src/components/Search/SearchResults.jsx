@@ -14,6 +14,7 @@ const SearchResults = () => {
     const fetchResults = async () => {
       if (!queryParam) return;
 
+      try {
       console.log("Query Parameter:", queryParam); // Debug log
 
       const postsRef = ref(db, "posts");
@@ -23,18 +24,21 @@ const SearchResults = () => {
         const posts = Object.values(snapshot.val());
         console.log("Fetched Posts:", posts); // Debug log
 
-    const filteredPosts = posts.filter(post =>
+        const filteredPosts = posts.filter(post =>
         post.title.toLowerCase().includes(queryParam.toLowerCase())
-    );
-
+        );
 
         setResults(filteredPosts);
       } else {
-            console.log("No posts found"); // Debug log
+        console.log("No posts found"); // Debug log
         setResults([]);
       }
-
+      } catch (error) {
+      console.error("Error fetching results:", error);
+      setResults([]);
+      } finally {
       setLoading(false);
+      }
     };
 
     fetchResults();

@@ -20,6 +20,7 @@ const Home = () => {
   // Fetch posts
   useEffect(() => {
     const fetchPosts = async () => {
+      try {
       const recentPostsQuery = query(
         ref(db, 'posts'),
         orderByChild('createdOn'),
@@ -29,21 +30,24 @@ const Home = () => {
       const snapshot = await get(recentPostsQuery);
       if (snapshot.exists()) {
         const posts = Object.entries(snapshot.val()).map(([id, post]) => ({
-          id,
-          ...post,
+        id,
+        ...post,
         }));
 
         setRecentPosts(posts.reverse());
 
         // Sort by comments count
         const sortedByComments = [...posts]
-          .sort(
-            (a, b) =>
-              Object.keys(b.comments || {}).length -
-              Object.keys(a.comments || {}).length
-          )
-          .slice(0, 10);
+        .sort(
+          (a, b) =>
+          Object.keys(b.comments || {}).length -
+          Object.keys(a.comments || {}).length
+        )
+        .slice(0, 10);
         setTopCommented(sortedByComments);
+      }
+      } catch (error) {
+      console.error('Error fetching posts:', error);
       }
     };
 

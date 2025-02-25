@@ -17,6 +17,8 @@ const PostHeader = ({ user, title, content, isAdmin }) => {
   const [editContent, setEditContent] = useState(content);
   const [userHandle, setUserHandle] = useState();
   const { id } = useParams();
+  const { userData } = useContext(AppContext);
+console.log(userData?.role)
 
   useEffect(() => {
     if (id) {
@@ -72,8 +74,13 @@ const PostHeader = ({ user, title, content, isAdmin }) => {
       setLikesCount((prev) => prev + 1);
     }
 
-    await update(ref(db), updates);
-    setIsLiked(!isLiked);
+    try {
+      await update(ref(db), updates);
+      setIsLiked(!isLiked);
+    } catch (error) {
+      console.error('Error updating likes:', error);
+      alert('Failed to update likes');
+    }
   };
 
   const handleSaveEdit = async () => {
@@ -168,7 +175,7 @@ const PostHeader = ({ user, title, content, isAdmin }) => {
         </Box>
       )}
 
-      {(isAdmin || user === userHandle) && (
+      {(userData?.role === "admin" || user === userHandle) && (
         <Button onClick={deletePost} colorScheme="red" variant="outline">
           Delete Post
         </Button>

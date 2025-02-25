@@ -35,7 +35,7 @@ import {
 
 const PostView = () => {
   const { user } = useContext(AppContext);
-
+  
   const [viewComments, setViewComments] = useState(false);
   const [viewReply, setViewReply] = useState(false);
   const [reply, setReply] = useState([]);
@@ -106,7 +106,7 @@ const PostView = () => {
           bg={boxBgColor}
           borderColor={borderColor}
         >
-          <PostHeader user={post.author} title={post.title} isAdmin={false} />
+          <PostHeader user={post.author} title={post.title} isAdmin={true} />
         </Box>
 
         <Box

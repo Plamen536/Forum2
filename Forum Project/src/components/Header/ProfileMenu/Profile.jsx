@@ -11,7 +11,7 @@ import { MdAdminPanelSettings } from "react-icons/md"; // Admin icon
 
 const Profile = () => {
   const [menuView, setMenuView] = useState(false);
-  const { user, userData } = useContext(AppContext);
+  const { userData } = useContext(AppContext);
 
   return (
     <Box position="relative">
@@ -25,7 +25,7 @@ const Profile = () => {
         aria-expanded={menuView} // For accessibility
       >
         <Avatar />
-        <Text ml={2} color="black">Profile</Text>
+        <Text ml={2} color="white">Profile</Text>
       </Button>
 
       {menuView && (

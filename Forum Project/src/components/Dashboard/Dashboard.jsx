@@ -47,16 +47,20 @@ const Dashboard = () => {
     if (!user) return;
 
     const postRef = ref(db, `posts/${postId}/likes/${user.uid}`);
-    const snapshot = await get(postRef);
+    try {
+      const snapshot = await get(postRef);
 
-    const updates = {};
-    if (snapshot.exists()) {
-      updates[`posts/${postId}/likes/${user.uid}`] = null;
-    } else {
-      updates[`posts/${postId}/likes/${user.uid}`] = true;
+      const updates = {};
+      if (snapshot.exists()) {
+        updates[`posts/${postId}/likes/${user.uid}`] = null;
+      } else {
+        updates[`posts/${postId}/likes/${user.uid}`] = true;
+      }
+
+      await update(ref(db), updates);
+    } catch (error) {
+      console.error("Error updating likes:", error);
     }
-
-    await update(ref(db), updates);
   };
 
   // Check if the user has liked the post

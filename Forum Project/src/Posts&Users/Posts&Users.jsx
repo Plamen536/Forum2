@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { getDatabase, ref, onValue } from "firebase/database";
-import "./Posts&Users.css";
 import { FaUsers } from "react-icons/fa";
 import { FaComments } from "react-icons/fa";
 import { Flex, Text } from '@chakra-ui/react';

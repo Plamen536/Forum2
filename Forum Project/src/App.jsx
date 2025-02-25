@@ -1,22 +1,21 @@
 import { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import PostsAndUsers from './Posts&Users/Posts&Users';
 import { auth } from './config/firebase-config';
 import { getUserData } from './services/users.service';
 import { AppContext } from './components/store/app.context';
-import Register from './components/Register/Register';
-import Home from './view/Home/Home';
-import NotFound from './view/NotFound/NotFound';
-import Login from './components/Login/Login';
-import Dashboard from './components/Dashboard/Dashboard';
-import PostView from './components/PostView/PostView';
-import UploadView from './components/Upload/Upload';
-import ProfileView from './components/ProfileLayout/ProfileView/ProfileView';
-import MainLayout from './components/MainLayout/MainLayout';
-import './App.css';
 import Admin from './components/Admin/Admin';
+import Dashboard from './components/Dashboard/Dashboard';
+import Home from './view/Home/Home';
+import Login from './components/Login/Login';
+import MainLayout from './components/MainLayout/MainLayout';
+import NotFound from './view/NotFound/NotFound';
+import PostView from './components/PostView/PostView';
+import ProfileView from './components/ProfileLayout/ProfileView/ProfileView';
+import Register from './components/Register/Register';
 import SearchResults from './components/Search/SearchResults';
+import UploadView from './components/Upload/Upload';
+import CarNews from './components/CarNews/CarNews';
 
 function App() {
   const [appState, setAppState] = useState({
@@ -68,7 +67,7 @@ function App() {
               <Route path="/upload" element={<UploadView />} />
               <Route path="/users" element={<Admin />} />
               <Route path="/search" element={<SearchResults />} />
-
+              <Route path="/car-news" element={<CarNews />} />
             </Route>
             {/* Profile section with its own layout */}
             <Route element={<ProfileView />}>

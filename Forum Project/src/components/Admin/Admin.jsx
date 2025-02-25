@@ -1,15 +1,12 @@
 import { ref, onValue, getDatabase, update } from "firebase/database";
 import React, { useEffect, useState } from "react";
-import { Box, Button, Heading, Stack, Text } from "@chakra-ui/react";
-import {
-  MdOutlineBlock,
-  MdAdminPanelSettings,
-} from "react-icons/md";
+import { Box, Button, Heading, Input, Stack, Text } from "@chakra-ui/react";
+import { MdOutlineBlock, MdAdminPanelSettings } from "react-icons/md";
 import { CgUnblock } from "react-icons/cg";
-
 
 export default function Admin() {
   const [users, setUsers] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     const db = getDatabase();
@@ -42,24 +39,34 @@ export default function Admin() {
       });
   };
 
+  const filteredUsers = users.filter((user) =>
+    user.handle.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <Box className="admin-dashboard" p={4} color="white">
       <Heading as="h1" size="xl" mb={6}>
         Admin Dashboard
       </Heading>
+      <Input
+        placeholder="Search by username"
+        mb={4}
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+      />
       <Stack spacing={4}>
-        {users.map((user) => (
+        {filteredUsers.map((user) => (
           <Box
             key={user.id}
             p={4}
             borderWidth={1}
             borderRadius="md"
             shadow="md"
-            bg="#f4f4f4 "
+            bg="#f4f4f4"
             color="black"
           >
             <Text>
-              <strong>ID:</strong> {user.handle}
+              <strong>Username:</strong> {user.handle}
             </Text>
             <Text>
               <strong>Name:</strong> {user.firstName} {user.lastName}
@@ -97,7 +104,6 @@ export default function Admin() {
                     leftIcon={<MdOutlineBlock />}
                     variant="solid"
                   >
-                    {" "}
                     Block User
                   </Button>
                 </>
