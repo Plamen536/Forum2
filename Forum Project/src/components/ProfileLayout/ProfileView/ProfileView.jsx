@@ -102,170 +102,172 @@ const ProfileView = () => {
   };
 
   return (
-    <>
-      <Box maxW="container.sm" mx="auto" py={6}>
-        <Heading as="h1" size="xl" mb={6}>
-          <Button
-            onClick={() => navigate(-1)}
-            leftIcon={<TbArrowBackUp />}
-            colorScheme="teal"
-          >
-            Back
-          </Button>{' '}
-          Profile
-        </Heading>
-
-        <Box mb={6}>
-          <Avatar size={120} />
-        </Box>
-
-        <Text fontSize="lg" fontWeight="bold">
-          Username: {data.handle}
-        </Text>
-
-        {!isEditing ? (
-          <>
-            <Text fontSize="md">First Name: {data.firstName}</Text>
-            <Text fontSize="md" mb={4}>
-              Last Name: {data.lastName}
-            </Text>
+    <Box display="flex" flexDirection="column" minHeight="100vh">
+      <Box flex="1">
+        <Box maxW="container.sm" mx="auto" py={6}>
+          <Heading as="h1" size="xl" mb={6}>
             <Button
-              onClick={() => setIsEditing(true)}
+              onClick={() => navigate(-1)}
+              leftIcon={<TbArrowBackUp />}
               colorScheme="teal"
-              variant="outline"
-              mb={4}
             >
-              Edit Name
-            </Button>
-          </>
-        ) : (
-          <form onSubmit={handleSubmit}>
-            <Stack spacing={4} mb={4}>
-              <Box>
-                <Text mb={2}>First Name</Text>
-                <Input
-                  name="firstName"
-                  value={editForm.firstName}
-                  onChange={handleInputChange}
-                  placeholder="First Name"
-                  minLength={4}
-                  maxLength={32}
-                />
-              </Box>
-              <Box>
-                <Text mb={2}>Last Name</Text>
-                <Input
-                  name="lastName"
-                  value={editForm.lastName}
-                  onChange={handleInputChange}
-                  placeholder="Last Name"
-                  minLength={4}
-                  maxLength={32}
-                />
-              </Box>
-              <Stack direction="row" spacing={4}>
-                <Button type="submit" colorScheme="teal">
-                  Save Changes
-                </Button>
-                <Button
-                  onClick={() => setIsEditing(false)}
-                  colorScheme="teal"
-                  variant="outline"
-                >
-                  Cancel
-                </Button>
+              Back
+            </Button>{' '}
+            Profile
+          </Heading>
+
+          <Box mb={6}>
+            <Avatar size={120} />
+          </Box>
+
+          <Text fontSize="lg" fontWeight="bold">
+            Username: {data.handle}
+          </Text>
+
+          {!isEditing ? (
+            <>
+              <Text fontSize="md">First Name: {data.firstName}</Text>
+              <Text fontSize="md" mb={4}>
+                Last Name: {data.lastName}
+              </Text>
+              <Button
+                onClick={() => setIsEditing(true)}
+                colorScheme="teal"
+                variant="outline"
+                mb={4}
+              >
+                Edit Name
+              </Button>
+            </>
+          ) : (
+            <form onSubmit={handleSubmit}>
+              <Stack spacing={4} mb={4}>
+                <Box>
+                  <Text mb={2}>First Name</Text>
+                  <Input
+                    name="firstName"
+                    value={editForm.firstName}
+                    onChange={handleInputChange}
+                    placeholder="First Name"
+                    minLength={4}
+                    maxLength={32}
+                  />
+                </Box>
+                <Box>
+                  <Text mb={2}>Last Name</Text>
+                  <Input
+                    name="lastName"
+                    value={editForm.lastName}
+                    onChange={handleInputChange}
+                    placeholder="Last Name"
+                    minLength={4}
+                    maxLength={32}
+                  />
+                </Box>
+                <Stack direction="row" spacing={4}>
+                  <Button type="submit" colorScheme="teal">
+                    Save Changes
+                  </Button>
+                  <Button
+                    onClick={() => setIsEditing(false)}
+                    colorScheme="teal"
+                    variant="outline"
+                  >
+                    Cancel
+                  </Button>
+                </Stack>
               </Stack>
-            </Stack>
-          </form>
-        )}
-        <Tabs isFitted variant='line' colorScheme='teal' size='lg' borderTopRadius='md'>
-          <TabList>
-          <Tab _hover={{color: '#53e9ed', bg: '#184748' }} borderTopLeftRadius="md" borderTopRightRadius="md">Your Posts</Tab>
-          <Tab _hover={{color: '#53e9ed', bg: '#184748' }} borderTopLeftRadius="md" borderTopRightRadius="md">Your Comments</Tab>
-          </TabList>
-          <TabPanels>
-            <TabPanel>
-            {userPosts.length > 0 ? (
-          <Stack spacing={4}>
-            {userPosts.map((post) => (
-              <Box
-                key={post.uid}
-                p={5}
-                shadow="md"
-                borderWidth="1px"
-                borderRadius="md"
-                _hover={{ shadow: 'lg' }}
-              >
-                <Heading as="h3" size="md" mb={2}>
-                  {post.title}
-                </Heading>
-                <Text noOfLines={2} mb={3} color="gray.300">
-                  {post.content.length > 100
-                    ? `${post.content.substring(0, 100)}...`
-                    : post.content}
-                </Text>
-                <Text fontSize="sm" color="gray.500">
-                  Posted on: {new Date(post.createdOn).toLocaleDateString()}
-                </Text>
-                <Button
-                  mt={3}
-                  size="sm"
-                  colorScheme="teal"
-                  onClick={() => navigate(`/post/${post.uid}`)}
-                >
-                  View Post
-                </Button>
-              </Box>
-            ))}
-          </Stack>
-        ) : (
-          <Text color="gray.500" textAlign="center">
-            You haven't created any posts yet.
-          </Text>
-        )}
-        </TabPanel>
-        <TabPanel>
-        {userComments.length > 0 ? (
-          <Stack spacing={4}>
-            {userComments.map((comment) => (
-              <Box
-                key={comment.uid}
-                p={5}
-                shadow="md"
-                borderWidth="1px"
-                borderRadius="md"
-                _hover={{ shadow: 'lg' }}
-              >
-                <Text noOfLines={2} mb={3} color="gray.300">
-                  {comment.text.length > 100
-                    ? `${comment.text.substring(0, 100)}...`
-                    : comment.text}
-                </Text>
-                <Text fontSize="sm" color="gray.500">
-                  Posted on: {new Date(comment.timestamp).toLocaleDateString()}
-                </Text>
-                <Button
-                  mt={3}
-                  size="sm"
-                  colorScheme="teal"
-                  onClick={() => navigate(`/post/${comment.postRef}`)}
-                >
-                  View Post
-                </Button>
-              </Box>
-            ))}
-          </Stack>
-        ) : (
-          <Text color="gray.500" textAlign="center">
-            You haven't created any comments yet.
-          </Text>
-        )}
-        </TabPanel>
-        </TabPanels>
-        </Tabs>
+            </form>
+          )}
+          <Tabs isFitted variant='line' colorScheme='teal' size='lg' borderTopRadius='md'>
+            <TabList>
+              <Tab _hover={{color: '#53e9ed', bg: '#184748' }} borderTopLeftRadius="md" borderTopRightRadius="md">Your Posts</Tab>
+              <Tab _hover={{color: '#53e9ed', bg: '#184748' }} borderTopLeftRadius="md" borderTopRightRadius="md">Your Comments</Tab>
+            </TabList>
+            <TabPanels>
+              <TabPanel>
+                {userPosts.length > 0 ? (
+                  <Stack spacing={4}>
+                    {userPosts.map((post) => (
+                      <Box
+                        key={post.uid}
+                        p={5}
+                        shadow="md"
+                        borderWidth="1px"
+                        borderRadius="md"
+                        _hover={{ shadow: 'lg' }}
+                      >
+                        <Heading as="h3" size="md" mb={2}>
+                          {post.title}
+                        </Heading>
+                        <Text noOfLines={2} mb={3} color="gray.300">
+                          {post.content.length > 100
+                            ? `${post.content.substring(0, 100)}...`
+                            : post.content}
+                        </Text>
+                        <Text fontSize="sm" color="gray.500">
+                          Posted on: {new Date(post.createdOn).toLocaleDateString()}
+                        </Text>
+                        <Button
+                          mt={3}
+                          size="sm"
+                          colorScheme="teal"
+                          onClick={() => navigate(`/post/${post.uid}`)}
+                        >
+                          View Post
+                        </Button>
+                      </Box>
+                    ))}
+                  </Stack>
+                ) : (
+                  <Text color="gray.500" textAlign="center">
+                    You haven't created any posts yet.
+                  </Text>
+                )}
+              </TabPanel>
+              <TabPanel>
+                {userComments.length > 0 ? (
+                  <Stack spacing={4}>
+                    {userComments.map((comment) => (
+                      <Box
+                        key={comment.uid}
+                        p={5}
+                        shadow="md"
+                        borderWidth="1px"
+                        borderRadius="md"
+                        _hover={{ shadow: 'lg' }}
+                      >
+                        <Text noOfLines={2} mb={3} color="gray.300">
+                          {comment.text.length > 100
+                            ? `${comment.text.substring(0, 100)}...`
+                            : comment.text}
+                        </Text>
+                        <Text fontSize="sm" color="gray.500">
+                          Posted on: {new Date(comment.timestamp).toLocaleDateString()}
+                        </Text>
+                        <Button
+                          mt={3}
+                          size="sm"
+                          colorScheme="teal"
+                          onClick={() => navigate(`/post/${comment.postRef}`)}
+                        >
+                          View Post
+                        </Button>
+                      </Box>
+                    ))}
+                  </Stack>
+                ) : (
+                  <Text color="gray.500" textAlign="center">
+                    You haven't created any comments yet.
+                  </Text>
+                )}
+              </TabPanel>
+            </TabPanels>
+          </Tabs>
+        </Box>
       </Box>
       <Footer />
-    </>
+    </Box>
   );
 };
 
