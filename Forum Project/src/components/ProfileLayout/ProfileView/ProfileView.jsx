@@ -8,10 +8,12 @@ import { onValue, ref, update } from 'firebase/database';
 import { db } from '../../../config/firebase-config';
 import { TbArrowBackUp } from 'react-icons/tb';
 import Footer from '@/components/Footer/Footer';
+import { Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react';
 
 const ProfileView = () => {
   const { user } = useContext(AppContext);
   const [userPosts, setUserPosts] = useState([]);
+  const [userComments, setUserComments] = useState([]);
   const [data, setData] = useState('');
   const [isEditing, setIsEditing] = useState(false);
   const [editForm, setEditForm] = useState({
@@ -42,6 +44,18 @@ const ProfileView = () => {
           setUserPosts(posts);
         } else {
           setUserPosts([]);
+        }
+      });
+      const userCommentsRef = ref(db, `users/${data.handle}/comments`);
+      onValue(userCommentsRef, (snapshot) => {
+        if (snapshot.exists()) {
+          const comments = Object.entries(snapshot.val()).map(([key, value]) => ({
+            ...value,
+            uid: key,
+          }));
+          setUserComments(comments);
+        } else {
+          setUserComments([]);
         }
       });
     }
@@ -164,12 +178,14 @@ const ProfileView = () => {
             </Stack>
           </form>
         )}
-        <hr />
-        <Heading as="h2" size="lg" my={4}>
-          Your Posts:
-        </Heading>
-
-        {userPosts.length > 0 ? (
+        <Tabs isFitted variant='line' colorScheme='teal' size='lg' borderTopRadius='md'>
+          <TabList>
+          <Tab _hover={{color: '#53e9ed', bg: '#184748' }} borderTopLeftRadius="md" borderTopRightRadius="md">Your Posts</Tab>
+          <Tab _hover={{color: '#53e9ed', bg: '#184748' }} borderTopLeftRadius="md" borderTopRightRadius="md">Your Comments</Tab>
+          </TabList>
+          <TabPanels>
+            <TabPanel>
+            {userPosts.length > 0 ? (
           <Stack spacing={4}>
             {userPosts.map((post) => (
               <Box
@@ -207,6 +223,46 @@ const ProfileView = () => {
             You haven't created any posts yet.
           </Text>
         )}
+        </TabPanel>
+        <TabPanel>
+        {userComments.length > 0 ? (
+          <Stack spacing={4}>
+            {userComments.map((comment) => (
+              <Box
+                key={comment.uid}
+                p={5}
+                shadow="md"
+                borderWidth="1px"
+                borderRadius="md"
+                _hover={{ shadow: 'lg' }}
+              >
+                <Text noOfLines={2} mb={3} color="gray.300">
+                  {comment.text.length > 100
+                    ? `${comment.text.substring(0, 100)}...`
+                    : comment.text}
+                </Text>
+                <Text fontSize="sm" color="gray.500">
+                  Posted on: {new Date(comment.timestamp).toLocaleDateString()}
+                </Text>
+                <Button
+                  mt={3}
+                  size="sm"
+                  colorScheme="teal"
+                  onClick={() => navigate(`/post/${comment.postRef}`)}
+                >
+                  View Post
+                </Button>
+              </Box>
+            ))}
+          </Stack>
+        ) : (
+          <Text color="gray.500" textAlign="center">
+            You haven't created any comments yet.
+          </Text>
+        )}
+        </TabPanel>
+        </TabPanels>
+        </Tabs>
       </Box>
       <Footer />
     </>

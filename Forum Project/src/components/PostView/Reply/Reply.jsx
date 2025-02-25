@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import { AppContext } from '../../store/app.context';
 import { getUserData } from '../../../services/users.service';
-import { push, ref } from 'firebase/database';
+import { push, ref, set } from 'firebase/database';
 import { useParams } from 'react-router-dom';
 import { db } from '../../../config/firebase-config';
 import './Reply.css';
@@ -43,13 +43,22 @@ const Reply = () => {
 
   const replySubmit = async () => {
     try {
+      const newReplyRef = push(ref(db, `posts/${id}/comments`));
+      const commentId = newReplyRef.key;
+
       const newReply = {
         avatar: userData.avatarUrl,
         text: reply,
         author: userData.handle,
         timestamp: Date.now(),
+        postRef: id,
       };
-      await push(ref(db, `posts/${id}/comments`), newReply);
+
+      await Promise.all([
+        set(newReplyRef, newReply),
+        set(ref(db, `users/${userData.handle}/comments/${commentId}`), newReply),
+      ]);
+
       setReply('');
       alert('Successfully posted reply!');
     } catch (error) {
