@@ -36,6 +36,8 @@ cd "Forum Project"
 2. Install dependencies
 
 ```sh
+npm i @chakra-ui/react
+npm i @chakra-ui/icons
 npm install
 ```
 
@@ -65,7 +67,15 @@ npm run dev
         "{postId}": {
           // Post reference
         }
-      }
+      },
+      "comments": {
+        "{commentId}": {
+          "text": "string",
+          "author": "string",
+          "avatar": "string",
+          "postRef": "string",
+          "timestamp": "number",
+        }
     }
   },
   "posts": {
