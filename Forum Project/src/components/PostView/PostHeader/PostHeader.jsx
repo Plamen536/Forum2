@@ -35,11 +35,11 @@ const PostHeader = ({ user, title, content }) => {
     }
   }, [id, currentUser]);
 
-  useEffect(() => {
+  {currentUser && useEffect(() => {
     getUserData(currentUser.uid)
       .then((data) => data[Object.keys(data)])
       .then((data) => setUserHandle(data.handle));
-  }, [currentUser]);
+  }, [currentUser]);}
 
   const deletePost = async () => {
     if (!window.confirm('Are you sure you want to delete this post?')) {
