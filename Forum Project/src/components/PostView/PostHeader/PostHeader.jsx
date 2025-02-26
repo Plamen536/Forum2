@@ -7,7 +7,7 @@ import { useParams } from 'react-router-dom';
 import { Box, Button, Input, Textarea, Text } from '@chakra-ui/react';
 import { getUserData } from '@/services/users.service';
 
-const PostHeader = ({ user, title, content, isAdmin }) => {
+const PostHeader = ({ user, title, content }) => {
   const navigate = useNavigate();
   const { user: currentUser } = useContext(AppContext);
   const [likesCount, setLikesCount] = useState(0);

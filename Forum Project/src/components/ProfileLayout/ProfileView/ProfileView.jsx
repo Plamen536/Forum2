@@ -16,9 +16,11 @@ const ProfileView = () => {
   const [userComments, setUserComments] = useState([]);
   const [data, setData] = useState('');
   const [isEditing, setIsEditing] = useState(false);
+  const { userData } = useContext(AppContext);
   const [editForm, setEditForm] = useState({
     firstName: '',
     lastName: '',
+    phoneNumber: '',
   });
   const navigate = useNavigate();
 
@@ -30,6 +32,7 @@ const ProfileView = () => {
         setEditForm({
           firstName: userData.firstName,
           lastName: userData.lastName,
+          phoneNumber: userData.phoneNumber,
         });
       })
       .catch((error) => error.message);
@@ -49,10 +52,12 @@ const ProfileView = () => {
       const userCommentsRef = ref(db, `users/${data.handle}/comments`);
       onValue(userCommentsRef, (snapshot) => {
         if (snapshot.exists()) {
-          const comments = Object.entries(snapshot.val()).map(([key, value]) => ({
-            ...value,
-            uid: key,
-          }));
+          const comments = Object.entries(snapshot.val()).map(
+            ([key, value]) => ({
+              ...value,
+              uid: key,
+            })
+          );
           setUserComments(comments);
         } else {
           setUserComments([]);
@@ -86,12 +91,14 @@ const ProfileView = () => {
       const updates = {};
       updates[`users/${data.handle}/firstName`] = editForm.firstName;
       updates[`users/${data.handle}/lastName`] = editForm.lastName;
+      updates[`users/${data.handle}/phoneNumber`] = editForm.phoneNumber;
 
       await update(ref(db), updates);
       setData((prev) => ({
         ...prev,
         firstName: editForm.firstName,
         lastName: editForm.lastName,
+        phoneNumber: editForm.phoneNumber,
       }));
       setIsEditing(false);
       alert('Profile updated successfully!');
@@ -130,6 +137,11 @@ const ProfileView = () => {
               <Text fontSize="md" mb={4}>
                 Last Name: {data.lastName}
               </Text>
+              {userData?.role === 'admin' && (
+                <Text fontSize="md" mb={4}>
+                  Phone number: {data.phoneNumber}
+                </Text>
+              )}
               <Button
                 onClick={() => setIsEditing(true)}
                 colorScheme="teal"
@@ -164,6 +176,20 @@ const ProfileView = () => {
                     maxLength={32}
                   />
                 </Box>
+
+                {userData?.role === 'admin' && (
+                  <Box>
+                    <Text mb={2}>Phone Number</Text>
+                    <Input
+                      name="phoneNumber"
+                      value={editForm.phoneNumber}
+                      onChange={handleInputChange}
+                      placeholder="Phone Number"
+                      minLength={10}
+                      maxLength={13}
+                    />
+                  </Box>
+                )}
                 <Stack direction="row" spacing={4}>
                   <Button type="submit" colorScheme="teal">
                     Save Changes
@@ -179,10 +205,28 @@ const ProfileView = () => {
               </Stack>
             </form>
           )}
-          <Tabs isFitted variant='line' colorScheme='teal' size='lg' borderTopRadius='md'>
+          <Tabs
+            isFitted
+            variant="line"
+            colorScheme="teal"
+            size="lg"
+            borderTopRadius="md"
+          >
             <TabList>
-              <Tab _hover={{color: '#53e9ed', bg: '#184748' }} borderTopLeftRadius="md" borderTopRightRadius="md">Your Posts</Tab>
-              <Tab _hover={{color: '#53e9ed', bg: '#184748' }} borderTopLeftRadius="md" borderTopRightRadius="md">Your Comments</Tab>
+              <Tab
+                _hover={{ color: '#53e9ed', bg: '#184748' }}
+                borderTopLeftRadius="md"
+                borderTopRightRadius="md"
+              >
+                Your Posts
+              </Tab>
+              <Tab
+                _hover={{ color: '#53e9ed', bg: '#184748' }}
+                borderTopLeftRadius="md"
+                borderTopRightRadius="md"
+              >
+                Your Comments
+              </Tab>
             </TabList>
             <TabPanels>
               <TabPanel>
@@ -206,7 +250,8 @@ const ProfileView = () => {
                             : post.content}
                         </Text>
                         <Text fontSize="sm" color="gray.500">
-                          Posted on: {new Date(post.createdOn).toLocaleDateString()}
+                          Posted on:{' '}
+                          {new Date(post.createdOn).toLocaleDateString()}
                         </Text>
                         <Button
                           mt={3}
@@ -243,7 +288,8 @@ const ProfileView = () => {
                             : comment.text}
                         </Text>
                         <Text fontSize="sm" color="gray.500">
-                          Posted on: {new Date(comment.timestamp).toLocaleDateString()}
+                          Posted on:{' '}
+                          {new Date(comment.timestamp).toLocaleDateString()}
                         </Text>
                         <Button
                           mt={3}
