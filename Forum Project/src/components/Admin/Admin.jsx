@@ -3,10 +3,12 @@ import React, { useEffect, useState } from "react";
 import { Box, Button, Heading, Input, Stack, Text } from "@chakra-ui/react";
 import { MdOutlineBlock, MdAdminPanelSettings } from "react-icons/md";
 import { CgUnblock } from "react-icons/cg";
+import { useNavigate } from "react-router-dom";
 
 export default function Admin() {
   const [users, setUsers] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     const db = getDatabase();
@@ -37,6 +39,11 @@ export default function Admin() {
       .catch((error) => {
         console.error(`Error updating user role to ${role}:`, error);
       });
+  };
+
+  const handleDoneClick = () => {
+    navigate("/");
+    window.location.reload();
   };
 
   const filteredUsers = users.filter((user) =>
@@ -126,6 +133,15 @@ export default function Admin() {
           </Box>
         ))}
       </Stack>
+      <Button
+        onClick={handleDoneClick}
+        bg="green.500"
+        colorScheme="green"
+        size="md"
+        mt={6}
+      >
+        Done
+      </Button>
     </Box>
   );
 }

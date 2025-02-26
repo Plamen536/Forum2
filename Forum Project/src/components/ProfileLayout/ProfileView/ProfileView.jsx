@@ -148,7 +148,7 @@ const ProfileView = () => {
                 variant="outline"
                 mb={4}
               >
-                Edit Name
+                Edit
               </Button>
             </>
           ) : (
