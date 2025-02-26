@@ -2,7 +2,7 @@
 
 ## Project Description
 
-A modern forum system built with React and Firebase where users can create posts, add comments, and interact through likes. Features include user authentication, post management, commenting system, and administrative capabilities for content moderation.
+A modern forum system built with React and Firebase where users can create posts, add comments, and interact through likes. This forum is designed for automotive enthusiasts to share their thoughts, ideas, and experiences about cars, including topics like car news, technical repairs, racing, and more.
 
 Key features:
 
@@ -26,7 +26,7 @@ Key features:
 
 ### Steps
 
-1. Clone the repository
+1. **Clone the repository**:
 
 ```sh
 git clone https://github.com/Plamen536/Forum2.git
@@ -36,8 +36,6 @@ cd "Forum Project"
 2. Install dependencies
 
 ```sh
-npm i @chakra-ui/react
-npm i @chakra-ui/icons
 npm install
 ```
 
@@ -58,6 +56,7 @@ npm run dev
       "handle": "string",
       "firstName": "string",
       "lastName": "string",
+      "phoneNumber": "string", // Only for admin role
       "email": "string",
       "uid": "string",
       "role": "string", // "user" | "admin" | "blocked"
@@ -76,6 +75,7 @@ npm run dev
           "postRef": "string",
           "timestamp": "number",
         }
+      }
     }
   },
   "posts": {
