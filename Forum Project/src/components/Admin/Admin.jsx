@@ -74,6 +74,9 @@ export default function Admin() {
             <Text>
               <strong>Email:</strong> {user.email}
             </Text>
+            {user?.phoneNumber && <Text>
+              <strong>Phone number:</strong> {user.phoneNumber}
+            </Text>}
             <Stack direction="row" spacing={4} mt={4}>
               {user.role === "admin" ? (
                 <Button
